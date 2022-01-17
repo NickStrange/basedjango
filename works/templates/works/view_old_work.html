@@ -1,0 +1,105 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  .truncate {
+      width: 200px;
+      background: #f2f2f2;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  }
+</style>
+    <H1>Old Work</H1>
+
+    <table>
+      <tr>
+        <th>Index</th>
+        <th>Item Id</th>
+        <th>Source</th>
+        <th>Notes</th>
+        <th>Location</th>
+          <th>Value</th>
+          <th>Inventory_date</th>
+          <th>Title</th>
+          <th>Series</th>
+<!--          <th>Type</th>-->
+          <th>Date_year</th>
+          <th>Medium</th>
+          <th>Signatures_and_writing</th>
+          <th>Condition</th>
+          <th>Category</th>
+          <th>Height</th>
+          <th>Width</th>
+          <th>Depth</th>
+          <th>Size_note</th>
+<!--          <th>Dimensions</th>-->
+          <th>File1</th>
+          <th>File2</th>
+          <th>File3</th>
+          <th>File4</th>
+          <th>File5</th>
+<!--          <th>Url1</th>-->
+<!--          <th>Url2</th>-->
+<!--          <th>Url3</th>-->
+<!--          <th>Url4</th>-->
+<!--          <th>Url5</th>-->
+      </tr>
+
+      {% for old_work in old_works %}
+          <tr>
+            <td>{{ old_work.index }}</td>
+            <td>{{ old_work.item_id }}</td>
+            <td nowrap>{{ old_work.source }}</td>
+            <td><div class="truncate">{{ old_work.notes }}</div></td>
+              <td><div class="truncate">{{ old_work.location }}</div></td>
+              <td>{{ old_work.value|default_if_none:"" }}</td>
+              <td>{{ old_work.inventory_date }}</td>
+              <td><div class="truncate">{{ old_work.title }}</div></td>
+              <td><div class="truncate">{{ old_work.series }}</div></td>
+<!--              <td>{{ old_work.type }}</td>-->
+              <td>{{ old_work.date_year }}</td>
+              <td><div class="truncate">{{ old_work.medium }}</div></td>
+              <td><div class="truncate">{{ old_work.signature_and_writing }}</div></td>
+              <td><div class="truncate">{{ old_work.condition }}</div></td>
+              <td>{{ old_work.category }}</td>
+              <td>{{ old_work.height|default_if_none:""  }}</td>
+              <td>{{ old_work.width|default_if_none:""  }}</td>
+              <td>{{ old_work.depth|default_if_none:""  }}</td>
+              <td><div class="truncate">{{ old_work.size_note }}</div></td>
+<!--              <td>{{ old_work.dimensions }}</td>-->
+              {% if not old_work.file1 is None %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file1}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if not old_work.file2 is None %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file2}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if not old_work.file3 is None %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file3}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if not old_work.file4 is None %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file4}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if not old_work.file5 is None %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file5}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+<!--              <td>{{ old_work.url1 }}</td>-->
+<!--              <td>{{ old_work.url2 }}</td>-->
+<!--              <td>{{ old_work.url3 }}</td>-->
+<!--              <td>{{ old_work.url4 }}</td>-->
+<!--              <td>{{ old_work.url5 }}</td>-->
+          </tr>
+      {% endfor %}
+    </table>
+
+{% endblock content %}
