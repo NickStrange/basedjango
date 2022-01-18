@@ -1,0 +1,92 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  .truncate {
+      width: 200px;
+      background: #f2f2f2;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  }
+</style>
+    <H1>Work</H1>
+
+    <table>
+      <tr>
+        <th>Index</th>
+        <th>Item Id</th>
+        <th>Source</th>
+        <th>Notes</th>
+        <th>Location</th>
+          <th>Value</th>
+          <th>Inventory_date</th>
+          <th>Title</th>
+          <th>Series</th>
+          <th>Date_year</th>
+          <th>Medium</th>
+          <th>Signatures_and_writing</th>
+          <th>Condition</th>
+          <th>Category</th>
+          <th>Height</th>
+          <th>Width</th>
+          <th>Depth</th>
+          <th>Size_note</th>
+          <th>File1</th>
+          <th>File2</th>
+          <th>File3</th>
+          <th>File4</th>
+          <th>File5</th>
+      </tr>
+
+      {% for work in works %}
+          <tr>
+            <td>{{ work.index }}</td>
+            <td>{{ work.item_id }}</td>
+            <td nowrap>{{ work.source }}</td>
+            <td><div class="truncate">{{ work.notes }}</div></td>
+              <td><div class="truncate">{{ work.location }}</div></td>
+              <td>{{ work.value|default_if_none:"" }}</td>
+              <td>{{ work.inventory_date }}</td>
+              <td><div class="truncate">{{ work.title }}</div></td>
+              <td><div class="truncate">{{ work.series }}</div></td>
+<!--              <td>{{ work.type }}</td>-->
+              <td>{{ work.date_year }}</td>
+              <td><div class="truncate">{{ work.medium }}</div></td>
+              <td><div class="truncate">{{ work.signature_and_writing }}</div></td>
+              <td><div class="truncate">{{ work.condition }}</div></td>
+              <td>{{ work.category }}</td>
+              <td>{{ work.height|default_if_none:""  }}</td>
+              <td>{{ work.width|default_if_none:""  }}</td>
+              <td>{{ work.depth|default_if_none:""  }}</td>
+              <td><div class="truncate">{{ work.size_note }}</div></td>
+<!--              <td>{{ work.dimensions }}</td>-->
+              {% if work.file1 %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file1}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if work.file2 %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file2}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if work.file3 %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file3}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if work.file4 %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file4}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+              {% if work.file5 %}
+                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file5}}"/></td>
+              {% else %}
+                 <td></td>
+              {% endif %}
+          </tr>
+      {% endfor %}
+    </table>
+{% endblock content %}

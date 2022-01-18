@@ -58,11 +58,11 @@ class Work(models.Model):
     width = models.IntegerField(null=True, blank=True)
     depth = models.IntegerField(null=True, blank=True)
     size_note = models.TextField(null=True, blank=True)
-    file1 = models.TextField(null=True, blank=True)
-    file2 = models.TextField(null=True, blank=True)
-    file3 = models.TextField(null=True, blank=True)
-    file4 = models.TextField(null=True, blank=True)
-    file5 = models.TextField(null=True, blank=True)
+    file1 = models.CharField(max_length=32, null=True, blank=True)
+    file2 = models.CharField(max_length=32, null=True, blank=True)
+    file3 = models.CharField(max_length=32, null=True, blank=True)
+    file4 = models.CharField(max_length=32, null=True, blank=True)
+    file5 = models.CharField(max_length=32, null=True, blank=True)
 
 
     def __str__(self):

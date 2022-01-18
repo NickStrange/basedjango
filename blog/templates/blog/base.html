@@ -31,6 +31,8 @@
         <!-- Navbar Right Side -->
         <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
+              <a class="nav-item nav-link" href="{% url 'download_works' %}">Download Works</a>
+              <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
               <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download Old Works</a>
               <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload Old Works</a>
               <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>

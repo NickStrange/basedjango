@@ -39,3 +39,31 @@ class OldWorkForm (forms.Form):
                 'url3',
                 'url4',
                 'url5']
+
+
+class WorkForm (forms.Form):
+    class Meta:
+        model=OldWork
+        fields=['index',
+                'item_id',
+                'source',
+                'notes',
+                'location',
+                'value',
+                'inventory_date',
+                'title',
+                'series',
+                'date_year',
+                'medium',
+                'signatures_and_writing',
+                'condition',
+                'category',
+                'height',
+                'width',
+                'depth',
+                'size_note',
+                'file1',
+                'file2',
+                'file3',
+                'file4',
+                'file5']
