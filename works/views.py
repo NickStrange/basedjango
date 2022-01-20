@@ -75,6 +75,7 @@ def upload_old_works(request) -> HttpResponse:
 
 def upload_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
+    Work.objects.all().delete()
     # check whether it's valid:
     if form.is_valid():
         file = form.cleaned_data['file_name']
@@ -86,7 +87,7 @@ def upload_works(request) -> HttpResponse:
             if cnt == 1:
                 continue
 
-            work = Work(index=row[0],
+            work = Work(
                         item_id=row[1],
                         source=row[2],
                         notes=row[3],
@@ -123,10 +124,23 @@ def view_old_works(request) -> HttpResponse:
     return render(request, 'works/view_old_work.html', context)
 
 def view_works(request) -> HttpResponse:
+    # works=Work.objects.all()
+    # d = {work.category:True for work in works}
+    # print('distinct', d)
     context = {
         'works': Work.objects.all()
     }
     return render(request, 'works/view_work.html', context)
+
+def view_work(request, id) -> HttpResponse:
+    # works=Work.objects.all()
+    # d = {work.category:True for work in works}
+    # print('distinct', d)
+
+    context = {
+        'work': Work.objects.get(id=id)
+    }
+    return render(request, 'works/work.html', context)
 
 
 def download_old_works(request):
@@ -163,9 +177,9 @@ def download_old_works(request):
 
     writer = csv.writer(response)
     writer.writerow(cols)
-    works = OldWork.objects.all()
+    oldworks = OldWork.objects.all()
 
-    for work in works:
+    for work in oldworks:
         row = [work.index,
                work.item_id,
                work.source,
@@ -203,9 +217,8 @@ def download_works(request):
     )
 
     cols = [
-          'Index',
-          'Item',
           'Id',
+          'Item',
           'Source',
           'Notes',
           'Location',
@@ -226,9 +239,9 @@ def download_works(request):
 
     writer = csv.writer(response)
     writer.writerow(cols)
-    works = OldWork.objects.all()
+    works = Work.objects.all()
     for work in works:
-        row = [work.index,
+        row = [work.id,
                work.item_id,
                work.source,
                work.notes,

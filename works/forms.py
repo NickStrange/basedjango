@@ -1,10 +1,10 @@
 from django import forms
-from works.models import OldWork
+from works.models import OldWork, Work
 
 
 class WorkLoadForm (forms.Form):
     file_name=forms.FileField( max_length=100)
-    
+
 
 class OldWorkForm (forms.Form):
     class Meta:
@@ -43,8 +43,8 @@ class OldWorkForm (forms.Form):
 
 class WorkForm (forms.Form):
     class Meta:
-        model=OldWork
-        fields=['index',
+        model=Work
+        fields=['id',
                 'item_id',
                 'source',
                 'notes',

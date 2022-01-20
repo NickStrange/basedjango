@@ -1,0 +1,55 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+    <H1>File Download</H1>
+    <div class="container">
+        <form action="" method="POST" enctype="multipart/form-data" class="form-control">
+
+            <div>{{ work.id }}</div>
+            <div>{{ work.item_id }}</div>
+            <div nowrap>{{ work.source }}</div>
+            <div><div class="truncate">{{ work.notes }}</div></div>
+              <div><div class="truncate">{{ work.location }}</div></div>
+              <div>{{ work.value|default_if_none:"" }}</div>
+              <div>{{ work.inventory_date }}</div>
+              <div><div class="truncate">{{ work.title }}</div></div>
+              <div><div class="truncate">{{ work.series }}</div></div>
+              <div>{{ work.date_year }}</div>
+              <div><div class="truncate">{{ work.medium }}</div></div>
+              <div><div class="truncate">{{ work.signature_and_writing }}</div></div>
+              <div><div class="truncate">{{ work.condition }}</div></div>
+              <div>{{ work.category }}</div>
+              <div>{{ work.height|default_if_none:""  }}</div>
+              <div>{{ work.width|default_if_none:""  }}</div>
+              <div>{{ work.depth|default_if_none:""  }}</div>
+              <div><div class="truncate">{{ work.size_note }}</div></div>
+              {% if work.file1 %}
+                  <div><img width="50px" src="{% static 'thumbs/' %}{{work.file1}}"/></div>
+
+              {% else %}
+                 <div></div>
+              {% endif %}
+              {% if work.file2 %}
+                  <div><img width="50px" src="{% static 'thumbs/'%}{{work.file2}}"/></div>
+              {% else %}
+                 <div></div>
+              {% endif %}
+              {% if work.file3 %}
+                  <div><img width="50px" src="{% static 'thumbs/'%}{{work.file3}}"/></div>
+              {% else %}
+                 <div></div>
+              {% endif %}
+              {% if work.file4 %}
+                  <div><img width="50px" src="{% static 'thumbs/'%}{{work.file4}}"/></div>
+              {% else %}
+                 <div></div>
+              {% endif %}
+              {% if work.file5 %}
+                  <div><img width="50px" src="{% static 'thumbs/'%}{{work.file5}}"/></div>
+              {% else %}
+                 <div></div>
+              {% endif %}
+            <button type="submit" class="btn btn-primary">Done</button>
+        </form>
+    </div>
+{% endblock content %}

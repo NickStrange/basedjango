@@ -1,20 +1,12 @@
 {% extends "blog/base.html" %}
 {% load static %}
 {% block content %}
-<style>
-  .truncate {
-      width: 200px;
-      background: #f2f2f2;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-  }
-</style>
+
     <H1>Work</H1>
 
     <table>
       <tr>
-        <th>Index</th>
+        <th>Id</th>
         <th>Item Id</th>
         <th>Source</th>
         <th>Notes</th>
@@ -41,7 +33,7 @@
 
       {% for work in works %}
           <tr>
-            <td>{{ work.index }}</td>
+            <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
             <td nowrap>{{ work.source }}</td>
             <td><div class="truncate">{{ work.notes }}</div></td>
