@@ -1,0 +1,19 @@
+{% extends "contacts/base.html" %}
+{% block content %}
+    <div class="content-section">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">
+              Load
+          </legend>
+            {{ form }}
+        </fieldset>
+        <div class="form-group mt-2">
+          <button class="btn btn-outline-secondary" type="submit">Load</button>
+          <a class="btn btn-outline-danger" href="{% url 'contacts-home' %}">Cancel</a>
+        </div>
+      </form>
+    </div>
+
+{% endblock content %}

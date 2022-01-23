@@ -6,6 +6,7 @@
 
     <table>
       <tr>
+        <td></td>
         <th>Id</th>
         <th>Item Id</th>
         <th>Source</th>
@@ -33,6 +34,7 @@
 
       {% for work in works %}
           <tr>
+            <td><a class="btn btn-secondary" href="{% url 'view_work' work.id %}">Detail</a></td>
             <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
             <td nowrap>{{ work.source }}</td>

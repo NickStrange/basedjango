@@ -39,8 +39,8 @@ urlpatterns = [
     # path('', include('blog.urls')),
     path('blog_home', include('blog.urls')),
     path('', include('works.urls')),
-    path('files/', include('files.urls')),
-    path('contact_files/', include('works.urls')),
+    path('works/', include('works.urls')),
+    path('contacts/', include('contacts.urls')),
 
 ]
 

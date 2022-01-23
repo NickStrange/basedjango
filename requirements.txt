@@ -1,3 +1,4 @@
 Django~=4.0
 Pillow~=8.4.0
 setuptools~=59.5.0
+fontawesome-free~=5.0

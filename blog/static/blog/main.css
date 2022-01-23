@@ -83,6 +83,11 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+tr:nth-child(odd) {background: #CCC;}
+tr:nth-child(even) {background: #FFF;}
+table td + td { border-left:1px solid grey; }
+table th { border-left:1px solid grey; background: #BBB;}
+
 .truncate {
   width: 200px;
   background: #f2f2f2;
@@ -90,5 +95,6 @@ a.article-title:hover {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 
 

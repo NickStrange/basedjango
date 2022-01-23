@@ -1,0 +1,40 @@
+{% extends "blog/base.html" %}
+{% block content %}
+{% load contacttags %}
+<!--    <h1>Contacts-->
+<!--        <a class="btn btn-outline-secondary m-3"  href="{% url 'create-contact' %}">Create</a>-->
+<!--    </h1>-->
+      <form method="POST" enctype="multipart/form-data">
+        <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create-contact' %}">Create new Contact</a>
+        {% csrf_token %}
+          {{ form }}
+          <button type="submit"><i class="fas fa-search fa-xs"></i></button>
+          <a href="{% url 'clear-contact' %}"><i class="fas fa-backspace fa-xs"></i></a>
+      </form>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            {% for col in cols %}
+                <th nowrap><a  class="mb-1" href="{% url 'sort-contact' col %}"><i class="fas fa-sort-up"></i></a>
+                    {{ col }}
+                    <a  class="mb-1" href="{% url 'reverse-sort-contact' col %}"><i class="fas fa-sort-down"></i></a></th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+        <tr>
+            <td><a class="mb-1" href="{% url 'edit-contact' contact.id %}"><i class="fas fa-edit"></i></a></td>
+            <td><a class="mb-1 me-2" href="{% url 'delete-contact' contact.id %}"><i class="fas fa-trash"></i></a></td>
+            {% for col in cols %}
+            <td>
+                {{contact|decode_col:col}}
+            </td>
+            {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

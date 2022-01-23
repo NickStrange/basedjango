@@ -3,7 +3,7 @@ from datetime import datetime
 from django.http import HttpResponse
 
 from django.shortcuts import render
-from .forms import WorkLoadForm, OldWorkForm, WorkForm
+from .forms import WorkLoadForm
 import csv
 
 from .models import OldWork, Work
@@ -123,143 +123,57 @@ def view_old_works(request) -> HttpResponse:
     }
     return render(request, 'works/view_old_work.html', context)
 
+
 def view_works(request) -> HttpResponse:
-    # works=Work.objects.all()
-    # d = {work.category:True for work in works}
-    # print('distinct', d)
+    print('view work')
     context = {
         'works': Work.objects.all()
     }
     return render(request, 'works/view_work.html', context)
 
-def view_work(request, id) -> HttpResponse:
-    # works=Work.objects.all()
-    # d = {work.category:True for work in works}
-    # print('distinct', d)
 
+def view_work(request, id) -> HttpResponse:
+    print('view workss')
+    last = -1 if id ==1 else id-1
+    next = id+1
     context = {
-        'work': Work.objects.get(id=id)
+        'work': Work.objects.get(id=id),
+        'last': last,
+        'next': next
     }
     return render(request, 'works/work.html', context)
 
 
 def download_old_works(request):
-    # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
         content_type='text/csv',
         headers={'Content-Disposition': 'attachment; filename="old_inventory.csv"'},
     )
-    cols = [
-          'Index',
-          'Item_id',
-          'Source',
-          'Notes',
-          'Location',
-          'Value',
-          'Inventory_date',
-          'Title',
-          'Series',
-          'Date_year',
-          'Medium',
-          'Signatures_and_writing',
-          'Condition',
-          'Category',
-          'Height',
-          'Width',
-          'Depth',
-          'Size_notes'
-          'File1',
-          'File2',
-          'File3',
-          'File4',
-          'File5',
-    ]
+    cols=[f.name for f in OldWork._meta.get_fields()]
 
     writer = csv.writer(response)
     writer.writerow(cols)
     oldworks = OldWork.objects.all()
 
     for work in oldworks:
-        row = [work.index,
-               work.item_id,
-               work.source,
-               work.notes,
-               work.location,
-               work.value,
-               work.inventory_date,
-               work.title,
-               work.series,
-               work.date_year,
-               work.medium,
-               work.signature_and_writing,
-               work.condition,
-               work.category,
-               work.height,
-               work.width,
-               work.depth,
-               work.size_note,
-               work.file1,
-               work.file2,
-               work.file3,
-               work.file4,
-               work.file5
-               ]
+        row = [getattr(oldworks, f.name) for f in OldWork._meta.get_fields()]
         writer.writerow(row)
 
     return response
 
 
 def download_works(request):
-    # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
         content_type='text/csv',
         headers={'Content-Disposition': 'attachment; filename="inventory.csv"'},
     )
-
-    cols = [
-          'Id',
-          'Item',
-          'Source',
-          'Notes',
-          'Location',
-          'Value',
-          'Inventory_date',
-          'Title',
-          'Date_year',
-          'Medium',
-          'Signatures_and_writing',
-          'Condition',
-          'Category',
-          'File1',
-          'File2',
-          'File3',
-          'File4',
-          'File5',
-    ]
+    cols = [f.name for f in OldWork._meta.get_fields()]
 
     writer = csv.writer(response)
     writer.writerow(cols)
     works = Work.objects.all()
     for work in works:
-        row = [work.id,
-               work.item_id,
-               work.source,
-               work.notes,
-               work.location,
-               work.value,
-               work.inventory_date,
-               work.title,
-               work.date_year,
-               work.medium,
-               work.signature_and_writing,
-               work.condition,
-               work.category,
-               work.file1,
-               work.file2,
-               work.file3,
-               work.file4,
-               work.file5
-               ]
+        row = [getattr(work, f.name) for f in Work._meta.get_fields()]
         writer.writerow(row)
 
     return response
