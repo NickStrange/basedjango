@@ -36,7 +36,7 @@
           <tr>
             <td><a class="mb-1" href="{% url 'edit-work' work.id %}"><i class="fas fa-edit"></i></a></td>
             <td><a class="mb-1 me-2" href="{% url 'delete-work' work.id %}"><i class="fas fa-trash"></i></a></td>
-            <td>{{ work.index }}</td>
+            <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
             <td nowrap>{{ work.source }}</td>
             <td><div class="truncate">{{ work.notes }}</div></td>
