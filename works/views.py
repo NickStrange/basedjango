@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
-from .forms import WorkLoadForm, SearchForm, WorkForm, WorkDDLForm
+from .forms import WorkLoadForm, SearchForm, WorkDDLForm
 import csv
 
 from .models import OldWork, Work
@@ -135,7 +135,7 @@ def view_old_works(request) -> HttpResponse:
 
 def work_home(request) -> HttpResponse:
     global search_field
-    cols = strip_cols(Work._meta.get_fields())
+    # cols = strip_cols(Work._meta.get_fields())
 
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
@@ -145,19 +145,18 @@ def work_home(request) -> HttpResponse:
         form = SearchForm(initial={'search_text': search_field})
 
     search = Q(item_id__contains=search_field) | Q(source__contains=search_field) | \
-             Q(notes__contains=search_field) | Q(location__contains=search_field) | \
-             Q(value__contains=search_field) | Q(inventory_date__contains=search_field) | \
-             Q(title__contains=search_field) | \
-             Q(series__contains=search_field) | Q(date_year__contains=search_field) | \
-             Q(medium__contains=search_field) | Q(signature_and_writing__contains=search_field) | \
-             Q(condition__contains=search_field) | Q(category__contains=search_field) | \
-             Q(height__contains=search_field) | Q(width__contains=search_field) | \
-             Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
-             Q(condition__contains=search_field) | Q(category__contains=search_field)
+        Q(notes__contains=search_field) | Q(location__contains=search_field) | \
+        Q(value__contains=search_field) | Q(inventory_date__contains=search_field) | \
+        Q(title__contains=search_field) | \
+        Q(series__contains=search_field) | Q(date_year__contains=search_field) | \
+        Q(medium__contains=search_field) | Q(signature_and_writing__contains=search_field) | \
+        Q(condition__contains=search_field) | Q(category__contains=search_field) | \
+        Q(height__contains=search_field) | Q(width__contains=search_field) | \
+        Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
+        Q(condition__contains=search_field) | Q(category__contains=search_field)
     context = {
         'form': form,
-        'works': Work.objects.all().filter(search
-    ).order_by(sort_field, "id"),
+        'works': Work.objects.all().filter(search).order_by(sort_field, "id"),
         'cols': strip_cols(Work._meta.get_fields())
     }
     return render(request, "works/works.html", context=context)
@@ -203,7 +202,7 @@ def work_delete(request, id):
 
 
 def view_work(request, id) -> HttpResponse:
-    last = -1 if id ==1 else id-1
+    last = -1 if id == 1 else id-1
     next = id+1
     context = {
         'work': Work.objects.get(id=id),
@@ -246,3 +245,14 @@ def download_works(request):
         writer.writerow(row)
 
     return response
+
+def work_sort(request, column):
+    global sort_field
+    sort_field = column
+    return redirect('works_home')
+
+
+def work_reverse_sort(request, column):
+    global sort_field
+    sort_field = f'-{column}'
+    return redirect('works_home')

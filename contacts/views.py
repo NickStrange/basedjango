@@ -18,7 +18,7 @@ def strip_cols(full_col):
 
 def contact_home(request):
     global search_field
-    cols = strip_cols(Contact._meta.get_fields())
+    # cols = strip_cols(Contact._meta.get_fields())
 
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
@@ -27,15 +27,14 @@ def contact_home(request):
     else:
         form = SearchForm(initial={'search_text': search_field})
     search = Q(last_name__contains=search_field) | Q(id__contains=search_field) | \
-             Q(title__contains=search_field) | Q(first_name__contains=search_field) | \
-             Q(phone_number__contains=search_field) | Q(email_address__contains=search_field) | \
-             Q(company_name__contains=search_field) | Q(address__contains=search_field) | \
-             Q(city__contains=search_field) | Q(country__contains=search_field) | \
-             Q(state__contains=search_field) | Q(post_code__contains=search_field)
+        Q(title__contains=search_field) | Q(first_name__contains=search_field) | \
+        Q(phone_number__contains=search_field) | Q(email_address__contains=search_field) | \
+        Q(company_name__contains=search_field) | Q(address__contains=search_field) | \
+        Q(city__contains=search_field) | Q(country__contains=search_field) | \
+        Q(state__contains=search_field) | Q(post_code__contains=search_field)
     context = {
         'form': form,
-        'contacts': Contact.objects.all().filter(search
-    ).order_by(sort_field, "id"),
+        'contacts': Contact.objects.all().filter(search).order_by(sort_field, "id"),
         'cols': strip_cols(Contact._meta.get_fields())
     }
     return render(request, "contacts/home.html", context=context)
@@ -98,7 +97,7 @@ def read_file(file_name):
         contact = Contact(id=line['id'], title=line['title'], first_name=line['first_name'],
                           last_name=line['last_name'], phone_number=line['phone_number'],
                           email_address=line['email_address'], company_name=line['company_name'],
-                          address=line['address'], city=line['city'] , state=line['state'],
+                          address=line['address'], city=line['city'], state=line['state'],
                           country=line['country'], post_code=line['post_code'])
         contact.save()
         print(contact)

@@ -34,9 +34,8 @@ class OldWork(models.Model):
     url4 = models.TextField(null=True, blank=True)
     url5 = models.TextField(null=True, blank=True)
 
-
     def __str__(self):
-        return f"OldWork(index={self.id}, item_id='{self.item_id}',title='{self.title}')"
+        return f"OldWork(index={self.index}, item_id='{self.item_id}',title='{self.title}')"
 
 
 class Work(models.Model):
@@ -70,7 +69,7 @@ class Work(models.Model):
     medium = models.TextField(null=True, blank=True)
     signature_and_writing = models.TextField(null=True, blank=True)
     condition = models.TextField(null=True, blank=True)
-    category = models.CharField(max_length=2,null=True, blank=True, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=2, null=True, blank=True, choices=CATEGORY_CHOICES)
     height = models.IntegerField(null=True, blank=True)
     width = models.IntegerField(null=True, blank=True)
     depth = models.IntegerField(null=True, blank=True)
@@ -81,8 +80,5 @@ class Work(models.Model):
     file4 = models.CharField(max_length=32, null=True, blank=True)
     file5 = models.CharField(max_length=32, null=True, blank=True)
 
-
     def __str__(self):
         return f"Work(item_id='{self.item_id}',title='{self.title}')"
-
-

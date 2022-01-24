@@ -20,33 +20,17 @@
       </form>
 
     <table>
-      <tr>
-        <th></th>
-        <th></th>
-        <th>Id</th>
-        <th>Item Id</th>
-        <th>Source</th>
-        <th>Notes</th>
-        <th>Location</th>
-          <th>Value</th>
-          <th>Inventory_date</th>
-          <th>Title</th>
-          <th>Series</th>
-          <th>Date_year</th>
-          <th>Medium</th>
-          <th>Signatures_and_writing</th>
-          <th>Condition</th>
-          <th>Category</th>
-          <th>Height</th>
-          <th>Width</th>
-          <th>Depth</th>
-          <th>Size_note</th>
-          <th>File1</th>
-          <th>File2</th>
-          <th>File3</th>
-          <th>File4</th>
-          <th>File5</th>
-      </tr>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            {% for col in cols %}
+                <th nowrap><a  class="mb-1" href="{% url 'sort-work' col %}"><i class="fas fa-sort-up"></i></a>
+                    {{ col }}
+                    <a  class="mb-1" href="{% url 'reverse-sort-work' col %}"><i class="fas fa-sort-down"></i></a></th>
+            {% endfor %}
+        </tr>
+    </thead>
 
       {% for work in works %}
           <tr>
