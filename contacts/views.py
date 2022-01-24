@@ -7,7 +7,7 @@ from .forms import ContactForm, UploadFileForm, SearchForm
 from django.contrib import messages
 from django.db.models import Q
 
-sort_field = 'first_name'
+sort_field = 'id'
 search_field = ''
 
 
@@ -16,7 +16,7 @@ def strip_cols(full_col):
     return result
 
 
-def home(request):
+def contact_home(request):
     global search_field
     cols = strip_cols(Contact._meta.get_fields())
 

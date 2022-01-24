@@ -7,6 +7,8 @@
     <table>
       <tr>
         <td></td>
+        <td></td>
+        <td></td>
         <th>Id</th>
         <th>Item Id</th>
         <th>Source</th>
@@ -34,6 +36,8 @@
 
       {% for work in works %}
           <tr>
+            <td><a class="mb-1" href="{% url 'edit-work' work.id %}">ee<i class="fas fa-edit"></i></a></td>
+            <td><a class="mb-1 me-2" href="{% url 'delete-work' work.id %}">dd<i class="fas fa-trash"></i></a></td>
             <td><a class="btn btn-secondary" href="{% url 'view_work' work.id %}">Detail</a></td>
             <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>

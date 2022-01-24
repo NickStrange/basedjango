@@ -1,13 +1,22 @@
 from datetime import datetime
 
+from django.db.models import Q
 from django.http import HttpResponse
 
-from django.shortcuts import render
-from .forms import WorkLoadForm
+from django.shortcuts import render, redirect
+from .forms import WorkLoadForm, SearchForm, WorkForm, WorkDDLForm
 import csv
 
 from .models import OldWork, Work
 from io import StringIO
+from django.contrib import messages
+
+sort_field = 'id'
+search_field = ''
+
+def strip_cols(full_col):
+    result = [f.name for f in full_col]
+    return result
 
 def decode_image(name:str) -> str:
     name = name.strip()
@@ -124,16 +133,76 @@ def view_old_works(request) -> HttpResponse:
     return render(request, 'works/view_old_work.html', context)
 
 
-def view_works(request) -> HttpResponse:
-    print('view work')
+def work_home(request) -> HttpResponse:
+    global search_field
+    cols = strip_cols(Work._meta.get_fields())
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST, initial={'search_text': search_field})
+        if form.is_valid():
+            search_field = form.cleaned_data['search_text']
+    else:
+        form = SearchForm(initial={'search_text': search_field})
+
+    search = Q(item_id__contains=search_field) | Q(source__contains=search_field) | \
+             Q(notes__contains=search_field) | Q(location__contains=search_field) | \
+             Q(value__contains=search_field) | Q(inventory_date__contains=search_field) | \
+             Q(title__contains=search_field) | \
+             Q(series__contains=search_field) | Q(date_year__contains=search_field) | \
+             Q(medium__contains=search_field) | Q(signature_and_writing__contains=search_field) | \
+             Q(condition__contains=search_field) | Q(category__contains=search_field) | \
+             Q(height__contains=search_field) | Q(width__contains=search_field) | \
+             Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
+             Q(condition__contains=search_field) | Q(category__contains=search_field)
     context = {
-        'works': Work.objects.all()
+        'form': form,
+        'works': Work.objects.all().filter(search
+    ).order_by(sort_field, "id"),
+        'cols': strip_cols(Work._meta.get_fields())
     }
-    return render(request, 'works/view_work.html', context)
+    return render(request, "works/works.html", context=context)
+
+def clear_work(request):
+    global search_field
+    search_field = ''
+    return redirect('works_home')
+
+
+def create_work(request):
+    if request.method == 'POST':
+        form = WorkDDLForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # username = form.cleaned_data.get('username')
+            messages.success(request, f'{form.instance} has been created')
+            return redirect('works_home')
+    else:
+        form = WorkDDLForm()
+    return render(request, "works/create_work.html", {'form': form})
+
+
+def work_edit(request, id):
+    work = Work.objects.get(id=id)
+    if request.method == 'POST':
+        form = WorkDDLForm(request.POST, instance=work)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{work} has been modified')
+            return redirect('works_home')
+    else:
+        form = WorkDDLForm(instance=work)
+    return render(request, "works/work_edit.html", {'form': form})
+
+def work_delete(request, id):
+    work = Work.objects.get(id=id)
+    if request.method == 'POST':
+        work.delete()
+        messages.success(request, f'{work} has been deleted')
+        return redirect('works_home')
+    return render(request, "works/delete_work.html", {'work': work})
 
 
 def view_work(request, id) -> HttpResponse:
-    print('view workss')
     last = -1 if id ==1 else id-1
     next = id+1
     context = {
