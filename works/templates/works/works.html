@@ -12,11 +12,11 @@
 </style>
     <H1>Work</H1>
       <form method="POST" enctype="multipart/form-data">
-        <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create-work' %}">Create new Work</a>
+        <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_work' %}">Create new Work</a>
         {% csrf_token %}
           {{ form }}
           <button type="submit"><i class="fas fa-search fa-xs"></i></button>
-          <a href="{% url 'clear-work' %}"><i class="fas fa-backspace fa-xs"></i></a>
+          <a href="{% url 'clear_work' %}"><i class="fas fa-backspace fa-xs"></i></a>
       </form>
 
     <table>
@@ -25,17 +25,17 @@
             <th></th>
             <th></th>
             {% for col in cols %}
-                <th nowrap><a  class="mb-1" href="{% url 'sort-work' col %}"><i class="fas fa-sort-up"></i></a>
+                <th nowrap><a  class="mb-1" href="{% url 'sort_work' col %}"><i class="fas fa-sort-up"></i></a>
                     {{ col }}
-                    <a  class="mb-1" href="{% url 'reverse-sort-work' col %}"><i class="fas fa-sort-down"></i></a></th>
+                    <a  class="mb-1" href="{% url 'reverse_sort_work' col %}"><i class="fas fa-sort-down"></i></a></th>
             {% endfor %}
         </tr>
     </thead>
 
       {% for work in works %}
           <tr>
-            <td><a class="mb-1" href="{% url 'edit-work' work.id %}"><i class="fas fa-edit"></i></a></td>
-            <td><a class="mb-1 me-2" href="{% url 'delete-work' work.id %}"><i class="fas fa-trash"></i></a></td>
+            <td><a class="mb-1" href="{% url 'edit_work' work.id %}"><i class="fas fa-edit"></i></a></td>
+            <td><a class="mb-1 me-2" href="{% url 'delete_work' work.id %}"><i class="fas fa-trash"></i></a></td>
             <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
             <td nowrap>{{ work.source }}</td>

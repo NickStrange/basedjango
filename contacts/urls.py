@@ -1,15 +1,16 @@
 from django.contrib import admin
 from django.urls import path
-from .views import contact_home, contact_edit, create_contact, contact_delete, contact_sort, contact_reverse_sort, load_contacts, clear_contact
+from .views import home_contacts, contact_edit, create_contact, \
+    contact_delete, sort_contact, reverse_sort_contact, load_contacts, clear_contact
 
 urlpatterns = [
-    path('home/', contact_home, name='contacts-home'),
-    path('edit-contact/<id>',contact_edit, name='edit-contact'),
-    path('create-contact',create_contact, name='create-contact'),
-    path('delete-contact/<id>',contact_delete, name='delete-contact'),
-    path('sort-contact/<str:column>',contact_sort, name='sort-contact'),
-    path('reverse-sort-contact/<str:column>',contact_reverse_sort, name='reverse-sort-contact'),
-    path('load-contact/',load_contacts, name='load-contact'),
-    path('clear-contact/',clear_contact, name='clear-contact'),
+    path('', home_contacts, name='home_contacts'),
+    path('edit_contact/<id>',contact_edit, name='edit_contact'),
+    path('create_contact',create_contact, name='create_contact'),
+    path('delete_contact/<id>',contact_delete, name='delete_contact'),
+    path('sort_contact/<str:column>',sort_contact, name='sort_contact'),
+    path('reverse_sort_contact/<str:column>',reverse_sort_contact, name='reverse_sort_contact'),
+    path('load_contact/',load_contacts, name='load_contacts'),
+    path('clear_contact/',clear_contact, name='clear_contact'),
 
 ]

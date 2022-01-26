@@ -16,7 +16,7 @@ def strip_cols(full_col):
     return result
 
 
-def contact_home(request):
+def home_contacts(request):
     global search_field
     # cols = strip_cols(Contact._meta.get_fields())
 
@@ -47,7 +47,7 @@ def contact_edit(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, f'{contact} has been modified')
-            return redirect('contacts-home')
+            return redirect('home_contacts')
     else:
         form = ContactForm(instance=contact)
     return render(request, "contacts/contact_edit.html", {'form': form})
@@ -60,7 +60,7 @@ def create_contact(request):
             form.save()
             # username = form.cleaned_data.get('username')
             messages.success(request, f'{form.instance} has been created')
-            return redirect('contacts-home')
+            return redirect('home_contacts')
     else:
         form = ContactForm()
     return render(request, "contacts/create_contact.html", {'form': form})
@@ -71,20 +71,20 @@ def contact_delete(request, id):
     if request.method == 'POST':
         contact.delete()
         messages.success(request, f'{contact} has been deleted')
-        return redirect('contacts-home')
+        return redirect('home_contacts')
     return render(request, "contacts/delete_contact.html", {'contact': contact})
 
 
-def contact_sort(request, column):
+def sort_contact(request, column):
     global sort_field
     sort_field = column
-    return redirect('contacts-home')
+    return redirect('home_contacts')
 
 
-def contact_reverse_sort(request, column):
+def reverse_sort_contact(request, column):
     global sort_field
     sort_field = f'-{column}'
-    return redirect('contacts-home')
+    return redirect('home_contacts')
 
 
 def read_file(file_name):
@@ -109,13 +109,13 @@ def load_contacts(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             read_file(request.FILES['file'])
-            return redirect('contacts-home')
+            return redirect('home_contacts')
     else:
         form = UploadFileForm()
-    return render(request, "contacts/load-contact.html", {'form': form})
+    return render(request, "contacts/load-contacts.html", {'form': form})
 
 
 def clear_contact(request):
     global search_field
     search_field = ''
-    return redirect('contacts-home')
+    return redirect('home_contacts')

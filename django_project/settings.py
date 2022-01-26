@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'contacts',
     'works',
+    'original',
     'django_static_fontawesome',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
