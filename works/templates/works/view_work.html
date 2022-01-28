@@ -9,8 +9,8 @@
     <div class="container">
         <div class="row">
             <div class="col-3">Item id:</div><div class="col-9">{{ work.item_id }}</div>
-            <div class="col-3">Category:</div><div class="col-9">{{ work.category }}</div>
-            <div class="col-3">Source:</div><div class="col-9">{{ work.source }}</div>
+            <div class="col-3">Category:</div><div class="col-9">{{ work.get_category_display }}</div>
+            <div class="col-3">Source:</div><div class="col-9">{{ work.get_source_display }}</div>
             <div class="col-3">Notes:</div><div class="col-9">{{ work.notes }}</div>
             <div class="col-3">Location:</div><div class="col-9">{{ work.location }}</div>
             <div class="col-3">Value:</div><div class="col-9">{{ work.value|default_if_none:"" }}</div>

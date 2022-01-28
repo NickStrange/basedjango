@@ -38,18 +38,18 @@
             <td><a class="mb-1 me-2" href="{% url 'delete_work' work.id %}"><i class="fas fa-trash"></i></a></td>
             <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
-            <td nowrap>{{ work.source }}</td>
+            <td nowrap>{{ work.get_source_display }}</td>
             <td><div class="truncate">{{ work.notes }}</div></td>
               <td><div class="truncate">{{ work.location }}</div></td>
               <td>{{ work.value|default_if_none:"" }}</td>
-              <td>{{ work.inventory_date }}</td>
+              <td>{{ work.inventory_date | date:"Y-m-d" }}</td>
               <td><div class="truncate">{{ work.title }}</div></td>
               <td><div class="truncate">{{ work.series }}</div></td>
               <td>{{ work.date_year }}</td>
               <td><div class="truncate">{{ work.medium }}</div></td>
               <td><div class="truncate">{{ work.signature_and_writing }}</div></td>
               <td><div class="truncate">{{ work.condition }}</div></td>
-              <td>{{ work.category }}</td>
+              <td>{{ work.get_category_display }}</td>
               <td>{{ work.height|default_if_none:""  }}</td>
               <td>{{ work.width|default_if_none:""  }}</td>
               <td>{{ work.depth|default_if_none:""  }}</td>

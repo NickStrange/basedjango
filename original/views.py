@@ -11,6 +11,39 @@ from .models import OldWork
 from io import StringIO
 from django.contrib import messages
 
+CATEGORY_CHOICES = [
+    ('Painting', 'Painting'),
+    ('Photography', 'Photography'),
+    ('Sketch Pad', 'Sketch Pad'),
+    ('Electromedia', 'Electromedia'),
+    ('Videograms', 'Videograms'),
+    ('Poetry Poster', 'Poetry Poster'),
+    ('Notebook', 'Notebook'),
+    ('Album', 'Album'),
+]
+
+SOURCE_CHOICES = [
+    ('Aldo foundation', 'Aldo foundation'),
+    ('Anna', 'Anna'),
+    ('Gifted', 'Gifted'),
+]
+
+def decode_source(before:str)->str:
+    if not before:
+        return before
+    for (key, val) in SOURCE_CHOICES:
+        if before.strip() == val:
+            return key
+    raise ValueError
+
+
+def decode_category(before:str)->str:
+    if not before:
+        return before
+    for (key, val) in CATEGORY_CHOICES:
+        if before.strip() == val:
+            return key
+    raise ValueError
 
 def decode_image(name: str) -> str:
     name = name.strip()
@@ -99,6 +132,8 @@ def download_old_works(request):
     oldworks = OldWork.objects.all()
 
     for work in oldworks:
+        work.category = decode_category(work.category)
+        work.source = decode_source(work.source)
         row = [getattr(work, f) for f in cols]
         writer.writerow(row)
 

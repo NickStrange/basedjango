@@ -10,6 +10,8 @@ import csv
 from .models import Work
 from io import StringIO
 from django.contrib import messages
+from django.core.management.color import no_style
+from django.db import connection
 
 sort_field = 'id'
 search_field = ''
@@ -18,10 +20,20 @@ def strip_cols(full_col):
     result = [f.name for f in full_col]
     return result
 
+def clear_works():
+    # command = "update sqlite_sequence set seq=0 where sqlite_sequence.name='works_work'"
+    # sequence_sql = connection.ops.sequence_reset_sql(no_style(), [works,])
+    # with connection.cursor() as cursor:
+    #     print('inside loops', sequence_sql)
+    #     for sql in sequence_sql:
+    #         print('sql', sql)
+    #         cursor.execute(sql)
+    Work.objects.all().delete()
+
 
 def upload_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
-    Work.objects.all().delete()
+    clear_works()
     # check whether it's valid:
     if form.is_valid():
         file = form.cleaned_data['file_name']
@@ -89,7 +101,7 @@ def home_works(request) -> HttpResponse:
         'works': Work.objects.all().filter(search).order_by(sort_field, "id"),
         'cols': strip_cols(Work._meta.get_fields())
     }
-    return render(request, "works/works.html", context=context)
+    return render(request, "works/home_works.html", context=context)
 
 
 def clear_work(request):
@@ -134,14 +146,14 @@ def delete_work(request, id):
 
 
 def view_work(request, id) -> HttpResponse:
-    last = -1 if id == 1 else id-1
+    last = 1 if id == 1 else id-1
     next = id+1
     context = {
         'work': Work.objects.get(id=id),
         'last': last,
         'next': next
     }
-    return render(request, 'works/work.html', context)
+    return render(request, 'works/view_work.html', context)
 
 
 def download_works(request):
