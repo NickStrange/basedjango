@@ -2,6 +2,8 @@ from django.urls import path
 from .views import download_works, \
     view_work, home_works, clear_work, create_work, edit_work, delete_work, work_sort, work_reverse_sort, upload_works
 
+
+
 urlpatterns = [
     path('', home_works, name='home_works'),
     path('work/<int:id>', view_work, name='view_work'),
