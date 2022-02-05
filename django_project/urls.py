@@ -11,7 +11,7 @@ Class-based views
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    2. Add a URL to urlpatterns:  path('django_project/', include('django_project.urls'))
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -36,8 +36,8 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
-    # path('', include('blog.urls')),
-    path('blog_home', include('blog.urls')),
+    # path('', include('django_project.urls')),
+    # path('blog_home', include('django_project.urls')),
     path('', include('works.urls')),
     path('original/', include('original.urls')),
     path('works/', include('works.urls')),

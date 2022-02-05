@@ -14,6 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print('BASE DIR*************', BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
     'works',
     'original',
     'django_static_fontawesome',
-    'blog.apps.BlogConfig',
+    # 'django_project.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
     'django.contrib.admin',
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/Users/nickstrange/PycharmProjects/foundation/basedjango/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,8 +124,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_URL='/Users/nickstrange/PycharmProjects/foundation/basedjango/static/'
 
-STATICFILES_DIR = [os.path.join(BASE_DIR, 'static'),]
+STATICFILES_DIR = [os.path.join(BASE_DIR, '/static'),]
+
+print('STATICFILESDIR ************', BASE_DIR, STATICFILES_DIR)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -133,7 +137,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL='view_works'
+LOGIN_REDIRECT_URL='home_works'
 LOGIN_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

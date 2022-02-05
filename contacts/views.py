@@ -6,6 +6,8 @@ from .models import Contact
 from .forms import ContactForm, UploadFileForm, SearchForm
 from django.contrib import messages
 from django.db.models import Q
+from django.core.paginator import Paginator
+
 
 sort_field = 'id'
 search_field = ''
@@ -32,9 +34,16 @@ def home_contacts(request):
         Q(company_name__contains=search_field) | Q(address__contains=search_field) | \
         Q(city__contains=search_field) | Q(country__contains=search_field) | \
         Q(state__contains=search_field) | Q(post_code__contains=search_field)
+
+    page_number = request.GET.get('page')
+    contacts_list = Contact.objects.all().filter(search).order_by(sort_field, "id")
+    paginator = Paginator(contacts_list, 7)
+    page_object = paginator.get_page(page_number)
     context = {
         'form': form,
-        'contacts': Contact.objects.all().filter(search).order_by(sort_field, "id"),
+        # 'contacts': Contact.objects.all().filter(search).order_by(sort_field, "id"),
+        #'page_obj': page_object,
+        'contacts': page_object,
         'cols': strip_cols(Contact._meta.get_fields())
     }
     return render(request, "contacts/home.html", context=context)

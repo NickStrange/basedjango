@@ -68,17 +68,23 @@ def upload_old_works(request) -> HttpResponse:
         csvf = StringIO(file.read().decode())
         reader = csv.reader(csvf, delimiter=',')
         cnt = 0
+        OldWork.objects.all().delete()
         for row in reader:
             cnt += 1
             if cnt == 1:
                 continue
-            old_work = OldWork(index=row[0],
+            print(cnt, row[6])
+# first
+#
+
+            old_work = OldWork(index=cnt-1,
                                item_id=row[1],
                                source=row[2],
                                notes=row[3],
                                location=row[4],
                                value=row[5] if row[5] else None,
                                inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
+                               #selected file placeholder
                                title=row[7],
                                series=row[8],
                                type=row[9],

@@ -26,7 +26,7 @@ class Work(models.Model):
     notes = models.TextField(null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     value = models.IntegerField(null=True, blank=True)
-    inventory_date = models.DateField(null=False, blank=False, default=datetime.now())
+    inventory_date = models.DateField(null=True, blank=True, default=datetime.now())
     title = models.TextField(null=True, blank=True)
     series = models.TextField(null=True, blank=True)
     # type
@@ -35,9 +35,9 @@ class Work(models.Model):
     signature_and_writing = models.TextField(null=True, blank=True)
     condition = models.TextField(null=True, blank=True)
     category = models.CharField(max_length=16, null=False, blank=False, choices=CATEGORY_CHOICES, default='Painting')
-    height = models.IntegerField(null=True, blank=True)
-    width = models.IntegerField(null=True, blank=True)
-    depth = models.IntegerField(null=True, blank=True)
+    height = models.FloatField(null=True, blank=True)
+    width = models.FloatField(null=True, blank=True)
+    depth = models.FloatField(null=True, blank=True)
     size_note = models.TextField(null=True, blank=True)
     #dimensions
     file1 = models.CharField(max_length=32, null=True, blank=True)
