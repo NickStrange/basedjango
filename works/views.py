@@ -12,6 +12,7 @@ from io import StringIO
 from django.contrib import messages
 from django.core.management.color import no_style
 from django.db import connection
+from django.core.paginator import Paginator
 
 sort_field = 'id'
 search_field = ''
@@ -96,9 +97,13 @@ def home_works(request) -> HttpResponse:
         Q(height__contains=search_field) | Q(width__contains=search_field) | \
         Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
         Q(condition__contains=search_field) | Q(category__contains=search_field)
+    page_number = request.GET.get('page')
+    work_list = Work.objects.all().filter(search).order_by(sort_field, "id")
+    paginator = Paginator(work_list, 15)
+    page_object = paginator.get_page(page_number)
     context = {
         'form': form,
-        'works': Work.objects.all().filter(search).order_by(sort_field, "id"),
+        'works': page_object,
         'cols': strip_cols(Work._meta.get_fields())
     }
     return render(request, "works/home_works.html", context=context)

@@ -10,6 +10,7 @@ import csv
 from .models import OldWork
 from io import StringIO
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 CATEGORY_CHOICES = [
     ('Painting', 'Painting'),
@@ -116,8 +117,16 @@ def upload_old_works(request) -> HttpResponse:
 
 
 def home_old_works(request) -> HttpResponse:
+    search_field=''
+    sort_field="index"
+    search = Q(index__contains=search_field) | Q(item_id__contains=search_field) | \
+        Q(source__contains=search_field)
+    page_number = request.GET.get('page')
+    work_list = OldWork.objects.all().filter(search).order_by(sort_field, "index")
+    paginator = Paginator(work_list, 15)
+    old_works = paginator.get_page(page_number)
     context = {
-        'old_works': OldWork.objects.all()
+        'old_works': old_works
     }
     return render(request, 'original/view_old_work.html', context)
 

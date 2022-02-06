@@ -42,6 +42,7 @@ urlpatterns = [
     path('original/', include('original.urls')),
     path('works/', include('works.urls')),
     path('contacts/', include('contacts.urls')),
+    path('chooser/', include('chooser.urls')),
 
 ]
 

@@ -10,7 +10,6 @@
       text-overflow: ellipsis;
   }
 </style>
-    <H1>Work</H1>
       <form method="POST" enctype="multipart/form-data">
         <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_work' %}">Create new Work</a>
         {% csrf_token %}
@@ -33,7 +32,7 @@
     </thead>
 
       {% for work in works %}
-          <tr>
+          <tr height="35px">
             <td><a class="mb-1" href="{% url 'edit_work' work.id %}"><i class="fas fa-edit"></i></a></td>
             <td><a class="mb-1 me-2" href="{% url 'delete_work' work.id %}"><i class="fas fa-trash"></i></a></td>
             <td>{{ work.id }}</td>
@@ -55,27 +54,27 @@
               <td>{{ work.depth|default_if_none:""  }}</td>
               <td><div class="truncate">{{ work.size_note }}</div></td>
               {% if work.file1 %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file1}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{work.file1}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if work.file2 %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file2}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{work.file2}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if work.file3 %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file3}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{work.file3}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if work.file4 %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file4}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{work.file4}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if work.file5 %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{work.file5}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{work.file5}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
@@ -83,4 +82,19 @@
       {% endfor %}
     </table>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if works.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ works.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ works.number }} of {{ works.paginator.num_pages }}.
+        </span>
+        {% if works.has_next %}
+            <a href="?page={{ works.next_page_number }}">next</a>
+            <a href="?page={{ works.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock content %}

@@ -12,11 +12,7 @@
     {% block style %}
         <link rel="stylesheet" type="text/css" href="{% static "fontawesome/css/all.min.css" %}" />
     {% endblock %}
-    {% if title %}
-        <title>Django Blog - {{ title }}</title>
-    {% else %}
-        <title>Django Blog</title>
-    {% endif %}
+    <title>Django</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon_io/favicon.ico' %}"/>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon_io/apple-touch-icon.png' %}"/>
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon_io/favicon-32x32.png' %}"/>
@@ -32,18 +28,29 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link" href="{% url 'home_works' %}">Works_Home</a>
-          <a class="nav-item nav-link" href="{% url 'home_contacts' %}">Contacts_Home</a>
+          <a class="nav-item nav-link" href="{% url 'home_chooser' %}">Switch</a>
+          {% if request.session.choice == "Work" %}
+              <a class="nav-item nav-link" href="{% url 'home_works' %}">Works_Home</a>
+          {% elif request.session.choice == "Original" %}
+              <a class="nav-item nav-link" href="{% url 'home_original' %}">Original_Home</a>
+          {% else %}
+              <a class="nav-item nav-link" href="{% url 'home_contacts' %}">Contacts_Home</a>
+          {% endif %}
         </div>
         <!-- Navbar Right Side -->
         <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
-              <a class="nav-item nav-link" href="{% url 'download_works' %}">Download Works</a>
-              <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
-              <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download Old Works</a>
-              <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload Old Works</a>
-              <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-              <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
+              {% if request.session.choice == "Work" %}
+                  <a class="nav-item nav-link" href="{% url 'download_works' %}">Download Works</a>
+                  <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
+              {% elif request.session.choice == "Original" %}
+                  <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download Original</a>
+                  <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload Original</a>
+              {% else %}
+                  <a class="nav-item nav-link" href="{% url 'download_contacts' %}">Download Contacts</a>
+                  <a class="nav-item nav-link" href="{% url 'load_contacts' %}">Upload Contacts</a>
+              {% endif %}
+               <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
             {% else %}
               <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
               <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>

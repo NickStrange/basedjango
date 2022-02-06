@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <H1>Old Work</H1>
-
     <table>
       <tr>
         <th>Id</th>
@@ -38,7 +36,7 @@
       </tr>
 
       {% for old_work in old_works %}
-          <tr>
+          <tr height="35px">
             <td>{{ old_work.index }}</td>
             <td>{{ old_work.item_id }}</td>
             <td nowrap>{{ old_work.get_source_display }}</td>
@@ -60,27 +58,27 @@
               <td><div class="truncate">{{ old_work.size_note }}</div></td>
 <!--              <td>{{ old_work.dimensions }}</td>-->
               {% if not old_work.file1 is None %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file1}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{old_work.file1}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if not old_work.file2 is None %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file2}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{old_work.file2}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if not old_work.file3 is None %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file3}}"/></td>
+                  <td><img width="35px" src="{% static 'thumbs/'%}{{old_work.file3}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if not old_work.file4 is None %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file4}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{old_work.file4}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
               {% if not old_work.file5 is None %}
-                  <td><img width="50px" src="{% static 'thumbs/'%}{{old_work.file5}}"/></td>
+                  <td><img height="35px" src="{% static 'thumbs/'%}{{old_work.file5}}"/></td>
               {% else %}
                  <td></td>
               {% endif %}
@@ -92,5 +90,21 @@
           </tr>
       {% endfor %}
     </table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if old_works.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ old_works.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ old_works.number }} of {{ old_works.paginator.num_pages }}.
+        </span>
+        {% if old_works.has_next %}
+            <a href="?page={{ old_works.next_page_number }}">next</a>
+            <a href="?page={{ old_works.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 {% endblock content %}

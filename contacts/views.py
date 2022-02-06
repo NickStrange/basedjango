@@ -7,6 +7,8 @@ from .forms import ContactForm, UploadFileForm, SearchForm
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
+from datetime import datetime
+from django.http import HttpResponse
 
 
 sort_field = 'id'
@@ -21,7 +23,6 @@ def strip_cols(full_col):
 def home_contacts(request):
     global search_field
     # cols = strip_cols(Contact._meta.get_fields())
-
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
         if form.is_valid():
@@ -37,7 +38,7 @@ def home_contacts(request):
 
     page_number = request.GET.get('page')
     contacts_list = Contact.objects.all().filter(search).order_by(sort_field, "id")
-    paginator = Paginator(contacts_list, 7)
+    paginator = Paginator(contacts_list, 15)
     page_object = paginator.get_page(page_number)
     context = {
         'form': form,
@@ -122,6 +123,24 @@ def load_contacts(request):
     else:
         form = UploadFileForm()
     return render(request, "contacts/load-contacts.html", {'form': form})
+
+
+def download_contacts(request):
+    now = datetime.now()  # current date and tim
+    date_time = now.strftime("%m/%d/%Y")
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': f'attachment; filename="contact{date_time}.csv"'},
+    )
+    cols = [f.name for f in Contact._meta.get_fields()]
+
+    writer = csv.writer(response)
+    writer.writerow(cols)
+    contacts = Contact.objects.all()
+    for contact in contacts:
+        row = [getattr(contact, f.name) for f in Contact._meta.get_fields()]
+        writer.writerow(row)
+    return response
 
 
 def clear_contact(request):

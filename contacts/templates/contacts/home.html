@@ -22,50 +22,39 @@
     </thead>
     <tbody>
       {% for contact in contacts %}
-        <tr>
+        <tr height="35px">
             <td><a class="mb-1" href="{% url 'edit_contact' contact.id %}"><i class="fas fa-edit"></i></a></td>
             <td><a class="mb-1 me-2" href="{% url 'delete_contact' contact.id %}"><i class="fas fa-trash"></i></a></td>
-            {% for col in cols %}
-            <td>
-                {{contact|decode_col:col}}
-            </td>
-            {% endfor %}
+            <td>{{ contact.id }}</td>
+            <td nowrap>{{ contact.title }}</td>
+            <td><div class="truncate">{{ contact.first_name }}</div></td>
+            <td><div class="truncate">{{ contact.last_name }}</div></td>
+            <td>{{ contact.phone_number }}</td>
+            <td><div class="truncate">{{ contact.email_address }}</div></td>
+            <td><div class="truncate">{{ contact.company_name }}</div></td>
+            <td><div class="truncate">{{ contact.address }}</div></td>
+            <td><div class="truncate">{{ contact.city }}</div></td>
+            <td><div class="truncate">{{ contact.country }}</div></td>
+            <td class="truncate">{{ contact.state }}</td>
+            <td class="truncate">{{ contact.post_code }}</td>
         </tr>
       {% endfor %}
     </tbody>
 </table>
 
 <div class="pagination">
-
     <span class="step-links">
-
         {% if contacts.has_previous %}
-
             <a href="?page=1">&laquo; first</a>
-
             <a href="?page={{ contacts.previous_page_number }}">previous</a>
-
         {% endif %}
-
-
-
         <span class="current">
-
             Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
-
         </span>
-
-
-
         {% if contacts.has_next %}
-
             <a href="?page={{ contacts.next_page_number }}">next</a>
-
             <a href="?page={{ contacts.paginator.num_pages }}">last &raquo;</a>
-
         {% endif %}
-
     </span>
-
 </div>
 {% endblock content %}
