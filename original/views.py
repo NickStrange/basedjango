@@ -1,4 +1,6 @@
 from datetime import datetime
+from os.path import exists
+
 
 from django.db.models import Q
 from django.http import HttpResponse
@@ -46,10 +48,16 @@ def decode_category(before:str)->str:
             return key
     raise ValueError
 
-def decode_image(name: str) -> str:
+def decode_image(name: str, index, id) -> str:
     name = name.strip()
     if not name or name == '':
+        if index == 0:
+            file=f"{id}.jpg"
+            file_exists = exists(f'/Users/nickstrange/PycharmProjects/foundation/basedjango/contacts/static/thumbs/{file}')
+            if file_exists:
+                return file
         return None
+
     if not name.startswith('remote:'):
         print('Error', name)
 
@@ -57,7 +65,6 @@ def decode_image(name: str) -> str:
     end = name.find('JPG')
     if end == -1:
         end = name.find('jpg')
-    print('y', st, end, 'x', name[st + 1: end + 3])
     return name[st + 1:end + 3]
 
 
@@ -74,10 +81,8 @@ def upload_old_works(request) -> HttpResponse:
             cnt += 1
             if cnt == 1:
                 continue
-            print(cnt, row[6])
 # first
 #
-
             old_work = OldWork(index=cnt-1,
                                item_id=row[1],
                                source=row[2],
@@ -99,11 +104,11 @@ def upload_old_works(request) -> HttpResponse:
                                depth=row[17] if row[17] else None,
                                size_note=row[18],
                                dimensions=row[19],
-                               file1=decode_image(row[20]),
-                               file2=decode_image(row[21]),
-                               file3=decode_image(row[22]),
-                               file4=decode_image(row[23]),
-                               file5=decode_image(row[24]),
+                               file1=decode_image(row[20], 0, row[1]),
+                               file2=decode_image(row[21], 1, row[1]),
+                               file3=decode_image(row[22], 2, row[1]),
+                               file4=decode_image(row[23], 3, row[1]),
+                               file5=decode_image(row[24], 4, row[1]),
                                url1=row[20],
                                url2=row[21],
                                url3=row[22],

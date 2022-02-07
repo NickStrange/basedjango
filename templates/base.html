@@ -4,7 +4,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=2.0">-->
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -29,7 +29,7 @@
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="navbar-nav mr-auto">
           <a class="nav-item nav-link" href="{% url 'home_chooser' %}">Switch</a>
-          {% if request.session.choice == "Work" %}
+          {% if not request.session.choice or request.session.choice == "Work" %}
               <a class="nav-item nav-link" href="{% url 'home_works' %}">Works_Home</a>
           {% elif request.session.choice == "Original" %}
               <a class="nav-item nav-link" href="{% url 'home_original' %}">Original_Home</a>
@@ -37,18 +37,23 @@
               <a class="nav-item nav-link" href="{% url 'home_contacts' %}">Contacts_Home</a>
           {% endif %}
         </div>
+          {{ request.user.username }}{{ request.user.is_superuser }} {{ request.session.choice }}
         <!-- Navbar Right Side -->
         <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
-              {% if request.session.choice == "Work" %}
+              {% if not request.session.choice or request.session.choice == "Work" %}
                   <a class="nav-item nav-link" href="{% url 'download_works' %}">Download Works</a>
-                  <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
+                  {% if request.user.is_superuser %}
+                      <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
+                  {% endif %}
               {% elif request.session.choice == "Original" %}
                   <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download Original</a>
                   <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload Original</a>
-              {% else %}
+            {% else %}
                   <a class="nav-item nav-link" href="{% url 'download_contacts' %}">Download Contacts</a>
-                  <a class="nav-item nav-link" href="{% url 'load_contacts' %}">Upload Contacts</a>
+                  {% if request.user.is_superuser %}
+                      <a class="nav-item nav-link" href="{% url 'load_contacts' %}">Upload Contacts</a>
+                  {% endif %}
               {% endif %}
                <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
             {% else %}
@@ -71,9 +76,9 @@
                 </div>
               {% endfor %}
             {% endif %}
-            {% block content %}{% endblock %}
         </div>
       </div>
+      {% block content %}{% endblock %}
     </main>
     <!-- Optional JavaScript; choose one of the two! -->
 

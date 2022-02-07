@@ -41,20 +41,24 @@
       {% endfor %}
     </tbody>
 </table>
+    <div class="mt-2">
+      Page:
+      {% if contacts.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.previous_page_number }}">Previous</a>
+      {% endif %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if contacts.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+      {% for num in contacts.paginator.page_range %}
+        {% if contacts.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > contacts.number|add:'-3' and num < contacts.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
         {% endif %}
-        <span class="current">
-            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
-        </span>
-        {% if contacts.has_next %}
-            <a href="?page={{ contacts.next_page_number }}">next</a>
-            <a href="?page={{ contacts.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+      {% endfor %}
+
+      {% if contacts.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.paginator.num_pages }}">Last</a>
+      {% endif %}
+    </div>
 {% endblock content %}

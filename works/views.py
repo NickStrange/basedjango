@@ -77,6 +77,7 @@ def upload_works(request) -> HttpResponse:
 
 
 def home_works(request) -> HttpResponse:
+    cart = request.session.get('cart', {})
     global search_field
     # cols = strip_cols(Work._meta.get_fields())
 
@@ -138,7 +139,8 @@ def edit_work(request, id):
             return redirect('home_works')
     else:
         form = WorkDDLForm(instance=work)
-    return render(request, "works/work_edit.html", {'form': form})
+        work = Work.objects.get(id=id)
+    return render(request, "works/work_edit.html", {'form': form, 'work': work})
 
 
 def delete_work(request, id):
