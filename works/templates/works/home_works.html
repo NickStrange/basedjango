@@ -54,7 +54,7 @@
               <td>{{ work.depth|default_if_none:""  }}</td>
               <td><div class="truncate">{{ work.size_note }}</div></td>
               {% if work.file1 %}
-                  <td><img class="img-hover-zoom" height="35px" src="{% static 'thumbs/'%}{{work.file1}}"/></td>
+              <td><div class="img-hover-zoom" ><img height="35px" src="{% static 'thumbs/'%}{{work.file1}}"/></div></td>
               {% else %}
                  <td></td>
               {% endif %}

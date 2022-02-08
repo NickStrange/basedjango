@@ -192,3 +192,7 @@ def work_reverse_sort(request, column):
     global sort_field
     sort_field = f'-{column}'
     return redirect('home_works')
+
+
+def work_test(request):
+    return render(request, 'works/test.html')
