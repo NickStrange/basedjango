@@ -16,6 +16,8 @@ from django.core.paginator import Paginator
 
 CATEGORY_CHOICES = [
     ('Painting', 'Painting'),
+    ('Container', 'Container'),
+    ('Drawing', 'Drawing'),
     ('Photography', 'Photography'),
     ('Sketch Pad', 'Sketch Pad'),
     ('Electromedia', 'Electromedia'),
@@ -31,6 +33,7 @@ SOURCE_CHOICES = [
     ('Gifted', 'Gifted'),
 ]
 
+
 def decode_source(before:str)->str:
     if not before:
         return before
@@ -40,13 +43,14 @@ def decode_source(before:str)->str:
     raise ValueError
 
 
-def decode_category(before:str)->str:
+def decode_category(before: str) -> str:
     if not before:
         return before
     for (key, val) in CATEGORY_CHOICES:
         if before.strip() == val:
             return key
-    raise ValueError
+    raise ValueError(before)
+
 
 def decode_image(name: str, index, id) -> str:
     name = name.strip()
@@ -68,6 +72,23 @@ def decode_image(name: str, index, id) -> str:
     return name[st + 1:end + 3]
 
 
+def check_null_category(category, item_id):
+    if not category:
+        if item_id.startswith('AT.PP'):
+            category = 'Poetry Poster'
+        elif item_id.startswith('AT.D'):
+            category = 'Drawing'
+        elif item_id.startswith('AT.P'):
+            category = 'Painting'
+        elif item_id.startswith('AT.E'):
+            category = 'Electromedia'
+        elif item_id.startswith('AT.B'):
+            category = 'Container'
+        else:
+            print(item_id)
+    return category
+
+
 def upload_old_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
     # check whether it's valid:
@@ -81,41 +102,45 @@ def upload_old_works(request) -> HttpResponse:
             cnt += 1
             if cnt == 1:
                 continue
-# first
-#
-            old_work = OldWork(index=cnt-1,
-                               item_id=row[1],
-                               source=row[2],
-                               notes=row[3],
-                               location=row[4],
-                               value=row[5] if row[5] else None,
-                               inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
-                               #selected file placeholder
-                               title=row[7],
-                               series=row[8],
-                               type=row[9],
-                               date_year=row[10],
-                               medium=' '.join(row[11].split()),
-                               signature_and_writing=row[12],
-                               condition=row[13],
-                               category=row[14],
-                               height=row[15] if row[15] and row[15] != '?' else None,
-                               width=row[16] if row[16] and row[16] != '?' else None,
-                               depth=row[17] if row[17] else None,
-                               size_note=row[18],
-                               dimensions=row[19],
-                               file1=decode_image(row[20], 0, row[1]),
-                               file2=decode_image(row[21], 1, row[1]),
-                               file3=decode_image(row[22], 2, row[1]),
-                               file4=decode_image(row[23], 3, row[1]),
-                               file5=decode_image(row[24], 4, row[1]),
-                               url1=row[20],
-                               url2=row[21],
-                               url3=row[22],
-                               url4=row[23],
-                               url5=row[24]
-                               )
-            old_work.save()
+
+            row[14] = check_null_category(row[14], row[1])
+
+            if row[1].strip() == 'AT.P 0774':
+                print('ignore', row[1])
+            else:
+                old_work = OldWork(index=cnt-1,
+                                   item_id=row[1],
+                                   source=row[2],
+                                   notes=row[3],
+                                   location=row[4],
+                                   value=row[5] if row[5] else None,
+                                   inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
+                                   #selected file placeholder
+                                   title=row[7],
+                                   series=row[8],
+                                   type=row[9],
+                                   date_year=row[10],
+                                   medium=' '.join(row[11].split()),
+                                   signature_and_writing=row[12],
+                                   condition=row[13],
+                                   category=row[14],
+                                   height=row[15] if row[15] and row[15] != '?' else None,
+                                   width=row[16] if row[16] and row[16] != '?' else None,
+                                   depth=row[17] if row[17] else None,
+                                   size_note=row[18],
+                                   dimensions=row[19],
+                                   file1=decode_image(row[20], 0, row[1]),
+                                   file2=decode_image(row[21], 1, row[1]),
+                                   file3=decode_image(row[22], 2, row[1]),
+                                   file4=decode_image(row[23], 3, row[1]),
+                                   file5=decode_image(row[24], 4, row[1]),
+                                   url1=row[20],
+                                   url2=row[21],
+                                   url3=row[22],
+                                   url4=row[23],
+                                   url5=row[24]
+                                   )
+                old_work.save()
 
     context = {'form': form, }
     return render(request, 'original/file_load.html', context)

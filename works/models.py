@@ -2,10 +2,12 @@ from django.db import models
 from django.contrib.admin.widgets import AdminDateWidget
 from datetime import datetime
 
+
 class Work(models.Model):
 
     CATEGORY_CHOICES = [
         ('Painting', 'Painting'),
+        ('Drawing', 'Drawing'),
         ('Photography', 'Photography'),
         ('Sketch Pad', 'Sketch Pad'),
         ('Electromedia', 'Electromedia'),
@@ -34,12 +36,12 @@ class Work(models.Model):
     medium = models.TextField(null=True, blank=True)
     signature_and_writing = models.TextField(null=True, blank=True)
     condition = models.TextField(null=True, blank=True)
-    category = models.CharField(max_length=16, null=False, blank=False, choices=CATEGORY_CHOICES, default='Painting')
+    category = models.CharField(max_length=16, null=True, blank=True, choices=CATEGORY_CHOICES, default='Painting')
     height = models.FloatField(null=True, blank=True)
     width = models.FloatField(null=True, blank=True)
     depth = models.FloatField(null=True, blank=True)
     size_note = models.TextField(null=True, blank=True)
-    #dimensions
+    # dimensions
     file1 = models.CharField(max_length=32, null=True, blank=True)
     file2 = models.CharField(max_length=32, null=True, blank=True)
     file3 = models.CharField(max_length=32, null=True, blank=True)

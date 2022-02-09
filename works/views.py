@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.core.management.color import no_style
 from django.db import connection
 from django.core.paginator import Paginator
+import sqlite3
 
 sort_field = 'id'
 search_field = ''
@@ -32,10 +33,32 @@ def clear_works():
     Work.objects.all().delete()
 
 
+def check_max(current_max, id):
+    pieces = id.split('.')
+    try:
+        if int(pieces[2]) > current_max:
+            current_max = int(pieces[2])
+        return current_max
+    except ValueError as e:
+        print('ignore ', id)
+        return current_max
+
+
+def set_seq(val):
+    connection_db = sqlite3.connect('db.sqlite3')
+    table_connection_db = connection_db.cursor()
+    table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
+    connection_db.commit()
+    connection_db.close()
+    print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
+
+
 def upload_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
     clear_works()
     # check whether it's valid:
+    max_id = 0
+    set_seq(0)
     if form.is_valid():
         file = form.cleaned_data['file_name']
         csvf = StringIO(file.read().decode())
@@ -45,6 +68,8 @@ def upload_works(request) -> HttpResponse:
             cnt += 1
             if cnt == 1:
                 continue
+
+            max_id = check_max(max_id, row[1])
 
             work = Work(
                         item_id=row[1],
@@ -73,6 +98,8 @@ def upload_works(request) -> HttpResponse:
             work.save()
 
     context = {'form': form, }
+    print('next id ', max_id+1)
+    set_seq(max_id+1)
     return render(request, 'works/file_load.html', context)
 
 
