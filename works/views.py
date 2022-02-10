@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
@@ -126,7 +126,10 @@ def home_works(request) -> HttpResponse:
         Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
         Q(condition__contains=search_field) | Q(category__contains=search_field)
     page_number = request.GET.get('page')
-    work_list = Work.objects.all().filter(search).order_by(sort_field, "id")
+    if sort_field.startswith('-'):
+        work_list = Work.objects.all().filter(search).order_by(F(sort_field[1:]).asc(nulls_last=True), F("id"))
+    else:
+        work_list = Work.objects.all().filter(search).order_by(F(sort_field).desc(nulls_last=True), F("id"))
     paginator = Paginator(work_list, 15)
     page_object = paginator.get_page(page_number)
     context = {

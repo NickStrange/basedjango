@@ -1,0 +1,19 @@
+      <div class="mt-2">
+          {% if works.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ works.previous_page_number }}">Previous</a>
+          {% endif %}
+
+          {% for num in works.paginator.page_range %}
+            {% if works.number == num %}
+              <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > works.number|add:'-3' and num < works.number|add:'3' %}
+              <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if works.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ works.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ works.paginator.num_pages }}">Last</a>
+          {% endif %}
+      </div>

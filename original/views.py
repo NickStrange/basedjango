@@ -146,7 +146,7 @@ def upload_old_works(request) -> HttpResponse:
     return render(request, 'original/file_load.html', context)
 
 
-def home_old_works(request) -> HttpResponse:
+def home_original(request) -> HttpResponse:
     search_field=''
     sort_field="index"
     search = Q(index__contains=search_field) | Q(item_id__contains=search_field) | \
@@ -158,7 +158,7 @@ def home_old_works(request) -> HttpResponse:
     context = {
         'old_works': old_works
     }
-    return render(request, 'original/view_old_work.html', context)
+    return render(request, 'original/home_original.html', context)
 
 
 def download_old_works(request):

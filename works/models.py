@@ -7,6 +7,7 @@ class Work(models.Model):
 
     CATEGORY_CHOICES = [
         ('Painting', 'Painting'),
+        ('Container', 'Container'),
         ('Drawing', 'Drawing'),
         ('Photography', 'Photography'),
         ('Sketch Pad', 'Sketch Pad'),
