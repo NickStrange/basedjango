@@ -13,19 +13,20 @@ from .models import OldWork
 from io import StringIO
 from django.contrib import messages
 from django.core.paginator import Paginator
+from common.CategoryChoices import CategoryChoices
 
-CATEGORY_CHOICES = [
-    ('Painting', 'Painting'),
-    ('Container', 'Container'),
-    ('Drawing', 'Drawing'),
-    ('Photography', 'Photography'),
-    ('Sketch Pad', 'Sketch Pad'),
-    ('Electromedia', 'Electromedia'),
-    ('Videograms', 'Videograms'),
-    ('Poetry Poster', 'Poetry Poster'),
-    ('Notebook', 'Notebook'),
-    ('Album', 'Album'),
-]
+# CATEGORY_CHOICES = [
+#     ('Painting', 'Painting'),
+#     ('Container', 'Container'),
+#     ('Drawing', 'Drawing'),
+#     ('Photography', 'Photography'),
+#     ('Sketch Pad', 'Sketch Pad'),
+#     ('Electromedia', 'Electromedia'),
+#     ('Videograms', 'Videograms'),
+#     ('Poetry Poster', 'Poetry Poster'),
+#     ('Notebook', 'Notebook'),
+#     ('Album', 'Album'),
+# ]
 
 SOURCE_CHOICES = [
     ('Aldo foundation', 'Aldo foundation'),
@@ -46,7 +47,7 @@ def decode_source(before:str)->str:
 def decode_category(before: str) -> str:
     if not before:
         return before
-    for (key, val) in CATEGORY_CHOICES:
+    for (key, val) in CategoryChoices.category_choices():
         if before.strip() == val:
             return key
     raise ValueError(before)
@@ -73,20 +74,21 @@ def decode_image(name: str, index, id) -> str:
 
 
 def check_null_category(category, item_id):
-    if not category:
-        if item_id.startswith('AT.PP'):
-            category = 'Poetry Poster'
-        elif item_id.startswith('AT.D'):
-            category = 'Drawing'
-        elif item_id.startswith('AT.P'):
-            category = 'Painting'
-        elif item_id.startswith('AT.E'):
-            category = 'Electromedia'
-        elif item_id.startswith('AT.B'):
-            category = 'Container'
-        else:
-            print(item_id)
-    return category
+    return category if category else CategoryChoices.decode_item_id(item_id)
+    # if not category:
+    #     if item_id.startswith('AT.PP'):
+    #         category = 'Poetry Poster'
+    #     elif item_id.startswith('AT.D'):
+    #         category = 'Drawing'
+    #     elif item_id.startswith('AT.P'):
+    #         category = 'Painting'
+    #     elif item_id.startswith('AT.E'):
+    #         category = 'Electromedia'
+    #     elif item_id.startswith('AT.B'):
+    #         category = 'Container'
+    #     else:
+    #         print(item_id)
+    # return category
 
 
 def upload_old_works(request) -> HttpResponse:
