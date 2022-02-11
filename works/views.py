@@ -18,18 +18,13 @@ import sqlite3
 sort_field = 'id'
 search_field = ''
 
+
 def strip_cols(full_col):
     result = [f.name for f in full_col]
     return result
 
+
 def clear_works():
-    # command = "update sqlite_sequence set seq=0 where sqlite_sequence.name='works_work'"
-    # sequence_sql = connection.ops.sequence_reset_sql(no_style(), [works,])
-    # with connection.cursor() as cursor:
-    #     print('inside loops', sequence_sql)
-    #     for sql in sequence_sql:
-    #         print('sql', sql)
-    #         cursor.execute(sql)
     Work.objects.all().delete()
 
 
@@ -40,7 +35,6 @@ def check_max(current_max, id):
             current_max = int(pieces[2])
         return current_max
     except ValueError as e:
-        print('ignore ', id)
         return current_max
 
 
@@ -99,7 +93,9 @@ def upload_works(request) -> HttpResponse:
 
     context = {'form': form, }
     print('next id ', max_id+1)
+    max_id = max_id if max_id > 5000 else 5000
     set_seq(max_id+1)
+    print('max', max_id)
     return render(request, 'works/file_load.html', context)
 
 

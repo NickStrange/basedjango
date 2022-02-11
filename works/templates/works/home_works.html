@@ -49,21 +49,21 @@
             <td>{{ work.id }}</td>
             <td>{{ work.item_id }}</td>
             <td nowrap>{{ work.get_source_display }}</td>
-            <td><div class="truncate">*{{ work.notes }}*</div></td>
-              <td><div class="truncate">{{ work.location }}</div></td>
-              <td>{{ work.value|default_if_none:"" }}</td>
+            <td><div class="truncate">{{ work.notes|default_if_none:'' }}</div></td>
+              <td><div class="truncate">{{ work.location|default_if_none:''  }}</div></td>
+              <td>{{ work.value }}</td>
               <td>{{ work.inventory_date | date:"Y-m-d" }}</td>
-              <td><div class="truncate">{{ work.title }}</div></td>
-              <td><div class="truncate">{{ work.series }}</div></td>
+              <td><div class="truncate">{{ work.title|default_if_none:'' }}</div></td>
+              <td><div class="truncate">{{ work.series|default_if_none:'' }}</div></td>
               <td>{{ work.date_year }}</td>
-              <td><div class="truncate">{{ work.medium }}</div></td>
-              <td><div class="truncate">{{ work.signature_and_writing }}</div></td>
-              <td><div class="truncate">{{ work.condition }}</div></td>
+              <td><div class="truncate">{{ work.medium|default_if_none:'' }}</div></td>
+              <td><div class="truncate">{{ work.signature_and_writing|default_if_none:'' }}</div></td>
+              <td><div class="truncate">{{ work.condition|default_if_none:'' }}</div></td>
               <td nowrap>{{ work.get_category_display }}</td>
               <td>{{ work.height|default_if_none:""  }}</td>
               <td>{{ work.width|default_if_none:""  }}</td>
               <td>{{ work.depth|default_if_none:""  }}</td>
-              <td><div class="truncate">{{ work.size_note }}</div></td>
+              <td><div class="truncate">{{ work.size_note|default_if_none:'' }}</div></td>
               {% if work.file1 %}
               <td>
                   <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file1}}">
