@@ -7,6 +7,7 @@ from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
 from .forms import WorkLoadForm
+from .forms import SearchForm
 import csv
 
 from .models import OldWork
@@ -14,6 +15,8 @@ from io import StringIO
 from django.contrib import messages
 from django.core.paginator import Paginator
 from common.CategoryChoices import CategoryChoices
+
+original_search_field = ''
 
 # CATEGORY_CHOICES = [
 #     ('Painting', 'Painting'),
@@ -35,13 +38,13 @@ SOURCE_CHOICES = [
 ]
 
 
-def decode_source(before:str)->str:
+def decode_source(before: str) -> str:
     if not before:
         return before
     for (key, val) in SOURCE_CHOICES:
         if before.strip() == val:
             return key
-    raise ValueError
+    raise ValueError(before)
 
 
 def decode_category(before: str) -> str:
@@ -53,24 +56,43 @@ def decode_category(before: str) -> str:
     raise ValueError(before)
 
 
-def decode_image(name: str, index, id) -> str:
-    name = name.strip()
-    if not name or name == '':
-        if index == 0:
-            file=f"{id}.jpg"
-            file_exists = exists(f'/Users/nickstrange/PycharmProjects/foundation/basedjango/contacts/static/thumbs/{file}')
-            if file_exists:
-                return file
-        return None
+def decode_no_name(index, id) -> str:
+    if index == 0:
+        file = f"{id}.jpg"
+        file_exists = exists(f'/Users/nickstrange/PycharmProjects/foundation/basedjango/contacts/static/thumbs/{file}')
+        if file_exists:
+            return file
+        # print("missing", file)
+    return None
 
-    if not name.startswith('remote:'):
-        print('Error', name)
 
+def decode_untitled(name, id):
+    start = name.find('JPEG:Untitled')
+    end = name.find('jpg')
+    print('Untitled', id, name[start+5: end+3])
+    return name[start+5: end+3]
+
+
+def regular_file(name):
     st = name.find(':')
     end = name.find('JPG')
     if end == -1:
         end = name.find('jpg')
     return name[st + 1:end + 3]
+
+
+def decode_image(name: str, index, id) -> str:
+    name = name.strip()
+    if not name or name == '':
+        return decode_no_name(index, id)
+
+    if not name.startswith('remote:'):
+        print('Error', name)
+
+    if 'Untitled' in name:
+        return decode_untitled(name, id)
+    else:
+        return regular_file(name)
 
 
 def check_null_category(category, item_id):
@@ -110,6 +132,10 @@ def upload_old_works(request) -> HttpResponse:
             if row[1].strip() == 'AT.P 0774':
                 print('ignore', row[1])
             else:
+                if row[1].strip() == 'AT.B.0001':
+                    print('was', row[14])
+                    row[14] = 'Container'
+                    print('modify', row[1], 'Container')
                 old_work = OldWork(index=cnt-1,
                                    item_id=row[1],
                                    source=row[2],
@@ -149,16 +175,25 @@ def upload_old_works(request) -> HttpResponse:
 
 
 def home_original(request) -> HttpResponse:
-    search_field=''
-    sort_field="index"
-    search = Q(index__contains=search_field) | Q(item_id__contains=search_field) | \
-        Q(source__contains=search_field)
+    sort_field = "index"
+    global original_search_field
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST, initial={'search_text': original_search_field})
+        if form.is_valid():
+            original_search_field = form.cleaned_data['search_text']
+    else:
+        form = SearchForm(initial={'search_text': original_search_field})
+
+    search = Q(index__contains=original_search_field) | Q(item_id__contains=original_search_field) | \
+        Q(source__contains=original_search_field)
     page_number = request.GET.get('page')
     work_list = OldWork.objects.all().filter(search).order_by(sort_field, "index")
     paginator = Paginator(work_list, 15)
     old_works = paginator.get_page(page_number)
     context = {
-        'old_works': old_works
+        'old_works': old_works,
+        'form': form
     }
     return render(request, 'original/home_original.html', context)
 
@@ -173,7 +208,6 @@ def download_old_works(request):
     )
     cols = [f.name for f in OldWork._meta.get_fields()
             if f.name not in ['dimensions', 'type', 'url1', 'url2', 'url3', 'url4', 'url5']]
-    print(cols)
     writer = csv.writer(response)
     writer.writerow(cols)
     oldworks = OldWork.objects.all()
@@ -185,3 +219,9 @@ def download_old_works(request):
         writer.writerow(row)
 
     return response
+
+
+def clear_original(request):
+    global original_search_field
+    original_search_field = ''
+    return redirect('home_original')

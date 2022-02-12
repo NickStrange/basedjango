@@ -6,6 +6,10 @@ class WorkLoadForm(forms.Form):
     file_name = forms.FileField(max_length=100)
 
 
+class SearchForm(forms.Form):
+    search_text = forms.CharField(max_length=20, label='')
+
+
 class OldWorkForm (forms.Form):
     class Meta:
         model = OldWork
