@@ -62,7 +62,7 @@ def decode_no_name(index, id) -> str:
         file_exists = exists(f'/Users/nickstrange/PycharmProjects/foundation/basedjango/contacts/static/thumbs/{file}')
         if file_exists:
             return file
-        # print("missing", file)
+        print("missing", file)
     return None
 
 

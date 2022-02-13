@@ -7,19 +7,6 @@ from common.CategoryChoices import CategoryChoices
 
 class Work(models.Model):
 
-    # CATEGORY_CHOICES = [
-    #     ('Painting', 'Painting'),
-    #     ('Container', 'Container'),
-    #     ('Drawing', 'Drawing'),
-    #     ('Photography', 'Photography'),
-    #     ('Sketch Pad', 'Sketch Pad'),
-    #     ('Electromedia', 'Electromedia'),
-    #     ('Videograms', 'Videograms'),
-    #     ('Poetry Poster', 'Poetry Poster'),
-    #     ('Notebook', 'Notebook'),
-    #     ('Album', 'Album'),
-    # ]
-
     SOURCE_CHOICES = [
         ('Aldo foundation', 'Aldo foundation'),
         ('Anna', 'Anna'),
@@ -53,29 +40,6 @@ class Work(models.Model):
 
     def gen_item_id(self):
         suffix = CategoryChoices.gen_suffix(self.category)
-        # suffix = ''
-        # if self.category == 'Painting':
-        #     suffix = 'P'
-        # elif self.category == 'Container':
-        #     suffix = 'B'
-        # elif self.category == 'Drawing':
-        #     suffix = 'D'
-        # elif self.category == 'Photography':
-        #     suffix = 'PH'
-        # elif self.category == 'Sketch Pad':
-        #     suffix = 'P'
-        # elif self.category == 'Electromedia':
-        #     suffix = 'E'
-        # elif self.category == 'Videograms':
-        #     suffix = 'V'
-        # elif self.category == 'Poetry Poster':
-        #     suffix = 'PP'
-        # elif self.category == 'Notebook':
-        #     suffix = 'N'
-        # elif self.category == 'Album':
-        #     suffix = 'A'
-        # else:
-        #     raise ValueError(f'Unexpected category {self.category}')
         self.item_id = f'AT.{suffix}.{self.id}'
 
     def save(self, *args, **kwargs):
@@ -95,6 +59,8 @@ class Work(models.Model):
             self.condition = None
         if not self.size_note:
             self.size_note = None
+        if not self.inventory_date:
+            self.inventory_date = timezone.now()
         super(Work, self).save(*args, **kwargs)
         if not self.item_id:
             self.gen_item_id()

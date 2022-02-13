@@ -23,11 +23,10 @@
     <div class="content-section">
       <form method="POST">
         {% csrf_token %}
-        id: {{ work.id }} item_id:{{ work.item_id }} category:{{ work.category }}
+        id: {{ work.id }} item_id:{{ work.item_id }} category:{{ work.category }} inventory_date:{{ form.inventory_date }}
         <fieldset class="form-group">
           <legend class="border-bottom mb-4">Edit</legend>
           {{ form.source|as_crispy_field }}
-          {{ form.inventory_date|as_crispy_field }}
           {{ form.notes|as_crispy_field }}
           {{ form.location|as_crispy_field }}
           {{ form.value|as_crispy_field }}

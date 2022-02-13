@@ -51,7 +51,7 @@
             <td nowrap>{{ work.get_source_display }}</td>
             <td><div class="truncate">{{ work.notes|default_if_none:'' }}</div></td>
               <td><div class="truncate">{{ work.location|default_if_none:''  }}</div></td>
-              <td>{{ work.value }}</td>
+              <td>{{ work.value|default_if_none:'' }}</td>
               <td>{{ work.inventory_date | date:"Y-m-d" }}</td>
               <td><div class="truncate">{{ work.title|default_if_none:'' }}</div></td>
               <td><div class="truncate">{{ work.series|default_if_none:'' }}</div></td>

@@ -7,7 +7,6 @@ class CategoryChoices:
         ('Photography', 'Photography'),
         ('Sketch Pad', 'Sketch Pad'),
         ('Electromedia', 'Electromedia'),
-        ('Videograms', 'Videograms'),
         ('Poetry Poster', 'Poetry Poster'),
         ('Notebook', 'Notebook'),
         ('Album', 'Album'),
@@ -31,8 +30,6 @@ class CategoryChoices:
             suffix = 'P'
         elif category == 'Electromedia':
             suffix = 'E'
-        elif category == 'Videograms':
-            suffix = 'V'
         elif category == 'Poetry Poster':
             suffix = 'PP'
         elif category == 'Notebook':
