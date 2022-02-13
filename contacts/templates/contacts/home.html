@@ -22,18 +22,21 @@
         <tr>
             <th></th>
             <th></th>
+            <th></th>
             {% for col in cols %}
                 <th nowrap><a  class="mb-1" href="{% url 'sort_contact' col %}"><i class="fas fa-sort-up"></i></a>
                     {{ col }}
                     <a  class="mb-1" href="{% url 'reverse_sort_contact' col %}"><i class="fas fa-sort-down"></i></a></th>
             {% endfor %}
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
       {% for contact in contacts %}
         <tr height="35px">
-            <td><a class="mb-1" href="{% url 'edit_contact' contact.id %}"><i class="fas fa-edit"></i></a></td>
-            <td><a class="mb-1 me-2" href="{% url 'delete_contact' contact.id %}"><i class="fas fa-trash"></i></a></td>
+            {% include "./edit_buttons.html" %}
             <td>{{ contact.id }}</td>
             <td nowrap>{{ contact.title }}</td>
             <td><div class="truncate">{{ contact.first_name }}</div></td>
@@ -46,6 +49,7 @@
             <td><div class="truncate">{{ contact.country }}</div></td>
             <td class="truncate">{{ contact.state }}</td>
             <td class="truncate">{{ contact.post_code }}</td>
+            {% include "./edit_buttons.html" %}
         </tr>
       {% endfor %}
     </tbody>

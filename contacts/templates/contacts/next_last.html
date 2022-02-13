@@ -1,0 +1,9 @@
+    <div class="mt-2 mb-2">
+        <a class="btn btn-secondary" href="{% url 'home_contacts' %}">Return</a>
+        {% if last > 0 %}
+            <a class="btn btn-secondary" href="{% url 'contact_view' last ids %}">Previous</a>
+        {% endif %}
+        {% if next > 0 %}
+            <a class="btn btn-secondary" href="{% url 'contact_view' next ids %}">Next</a>
+        {% endif %}
+    </div>

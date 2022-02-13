@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    {% include "./next_last.html" %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-3">Title:</div><div class="col-9">{{ contact.title|default_if_none:"" }}</div>
+            <div class="col-3">First Name:</div><div class="col-9">{{ contact.first_name|default_if_none:"" }}</div>
+            <div class="col-3">Last Name:</div><div class="col-9">{{ contact.last_name|default_if_none:"" }}</div>
+            <div class="col-3">Phone Number:</div><div class="col-9">{{ contact.phone_number|default_if_none:"" }}</div>
+            <div class="col-3">Email Address:</div><div class="col-9">{{ contact.email_address|default_if_none:"" }}</div>
+            <div class="col-3">Company Name:</div><div class="col-9">{{ contact.company_name|default_if_none:""}}</div>
+            <div class="col-3">Address:</div><div class="col-9">{{ contact.address|default_if_none:"" }}</div>
+            <div class="col-3">City:</div><div class="col-9">{{ contact.city|default_if_none:"" }}</div>
+            <div class="col-3">Country:</div><div class="col-9">{{ contact.country|default_if_none:"" }}</div>
+            <div class="col-3">State:</div><div class="col-9">{{ contact.state|default_if_none:"" }}</div>
+            <div class="col-3">Post Code:</div><div class="col-9">{{ contact.post_code|default_if_none:"" }}</div>
+        </div>
+    </div>
+
+    {% include "./next_last.html" %}
+
+{% endblock content %}

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from .models import Contact
 from .forms import ContactForm, UploadFileForm, SearchForm
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.paginator import Paginator
 from datetime import datetime
 from django.http import HttpResponse
@@ -37,15 +37,22 @@ def home_contacts(request):
         Q(state__contains=search_field) | Q(post_code__contains=search_field)
 
     page_number = request.GET.get('page')
-    contacts_list = Contact.objects.all().filter(search).order_by(sort_field, "id")
+    # contacts_list = Contact.objects.all().filter(search).order_by(sort_field, "id")
+    if sort_field.startswith('-'):
+        contacts_list = Contact.objects.all().filter(search).order_by(F(sort_field[1:]).asc(nulls_last=True), F("id"))
+    else:
+        contacts_list = Contact.objects.all().filter(search).order_by(F(sort_field).desc(nulls_last=True), F("id"))
+
     paginator = Paginator(contacts_list, 15)
     page_object = paginator.get_page(page_number)
+    work_ids = ",".join([str(work.id) for work in page_object])
     context = {
         'form': form,
         # 'contacts': Contact.objects.all().filter(search).order_by(sort_field, "id"),
         #'page_obj': page_object,
         'contacts': page_object,
-        'cols': strip_cols(Contact._meta.get_fields())
+        'cols': strip_cols(Contact._meta.get_fields()),
+        'ids': work_ids
     }
     return render(request, "contacts/home.html", context=context)
 
@@ -83,6 +90,23 @@ def contact_delete(request, id):
         messages.success(request, f'{contact} has been deleted')
         return redirect('home_contacts')
     return render(request, "contacts/delete_contact.html", {'contact': contact})
+
+
+def contact_view(request, id, ids) -> HttpResponse:
+    id_nums = ids.split(',')
+    offset = id_nums.index(str(id))
+    if offset < 0:
+        raise ValueError(f"Can't find {id}")
+    last = 0 if offset == 0 else int(id_nums[offset -1])
+    next = 0 if offset >= len(id_nums) - 1 else int(id_nums[offset + 1])
+    print('id', id, 'offset', offset, 'last', last, 'next', next, 'ids', id_nums)
+    context = {
+        'contact': Contact.objects.get(id=id),
+        'last': last,
+        'next': next,
+        'ids': ids
+    }
+    return render(request, 'contacts/view_contact.html', context)
 
 
 def sort_contact(request, column):

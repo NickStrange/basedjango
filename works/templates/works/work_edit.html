@@ -9,8 +9,11 @@
     <div class="content-section">
       <form method="POST">
         {% csrf_token %}
+        <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Commit</button>
+          <a href = "{% url 'home_works' %}" class="btn btn-outline-info">Cancel</a>
+        </div>
         <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Edit</legend>
           {{ form.source|as_crispy_field }}
           {{ form.notes|as_crispy_field }}
           {{ form.location|as_crispy_field }}
@@ -31,10 +34,6 @@
           {{ form.file4|as_crispy_field }}
           {{ form.file5|as_crispy_field }}
         </fieldset>
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Commit</button>
-          <a href = "{% url 'home_works' %}" class="btn btn-outline-info">Cancel</a>
-        </div>
       </form>
     </div>
 

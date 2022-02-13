@@ -16,20 +16,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from common.CategoryChoices import CategoryChoices
 
-original_search_field = ''
-
-# CATEGORY_CHOICES = [
-#     ('Painting', 'Painting'),
-#     ('Container', 'Container'),
-#     ('Drawing', 'Drawing'),
-#     ('Photography', 'Photography'),
-#     ('Sketch Pad', 'Sketch Pad'),
-#     ('Electromedia', 'Electromedia'),
-#     ('Videograms', 'Videograms'),
-#     ('Poetry Poster', 'Poetry Poster'),
-#     ('Notebook', 'Notebook'),
-#     ('Album', 'Album'),
-# ]
+# original_search_field = ''
 
 SOURCE_CHOICES = [
     ('Aldo foundation', 'Aldo foundation'),
@@ -97,20 +84,6 @@ def decode_image(name: str, index, id) -> str:
 
 def check_null_category(category, item_id):
     return category if category else CategoryChoices.decode_item_id(item_id)
-    # if not category:
-    #     if item_id.startswith('AT.PP'):
-    #         category = 'Poetry Poster'
-    #     elif item_id.startswith('AT.D'):
-    #         category = 'Drawing'
-    #     elif item_id.startswith('AT.P'):
-    #         category = 'Painting'
-    #     elif item_id.startswith('AT.E'):
-    #         category = 'Electromedia'
-    #     elif item_id.startswith('AT.B'):
-    #         category = 'Container'
-    #     else:
-    #         print(item_id)
-    # return category
 
 
 def upload_old_works(request) -> HttpResponse:
@@ -176,17 +149,29 @@ def upload_old_works(request) -> HttpResponse:
 
 def home_original(request) -> HttpResponse:
     sort_field = "index"
-    global original_search_field
+    original_search_field = request.session.get("original_search", "")
 
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': original_search_field})
         if form.is_valid():
             original_search_field = form.cleaned_data['search_text']
+            request.session["original_search"] = original_search_field
+
     else:
         form = SearchForm(initial={'search_text': original_search_field})
 
     search = Q(index__contains=original_search_field) | Q(item_id__contains=original_search_field) | \
-        Q(source__contains=original_search_field)
+        Q(source__contains=original_search_field) | Q(source__contains=original_search_field) | \
+        Q(notes__contains=original_search_field) | Q(location__contains=original_search_field) | \
+        Q(value__contains=original_search_field) | Q(inventory_date__contains=original_search_field) | \
+        Q(title__contains=original_search_field) | Q(series__contains=original_search_field) | \
+        Q(type__contains=original_search_field) | Q(date_year__contains=original_search_field) | \
+        Q(medium__contains=original_search_field) | Q(signature_and_writing__contains=original_search_field) | \
+        Q(condition__contains=original_search_field) | Q(category__contains=original_search_field) | \
+        Q(height__contains=original_search_field) | Q(width__contains=original_search_field) | \
+        Q(depth__contains=original_search_field) | Q(size_note__contains=original_search_field) | \
+        Q(dimensions__contains=original_search_field)
+
     page_number = request.GET.get('page')
     work_list = OldWork.objects.all().filter(search).order_by(sort_field, "index")
     paginator = Paginator(work_list, 15)
@@ -222,6 +207,5 @@ def download_old_works(request):
 
 
 def clear_original(request):
-    global original_search_field
-    original_search_field = ''
+    request.session["original_search"] = ''
     return redirect('home_original')

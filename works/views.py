@@ -15,8 +15,8 @@ from django.db import connection
 from django.core.paginator import Paginator
 import sqlite3
 
-sort_field = 'id'
-search_field = ''
+# sort_field = 'id'
+# search_field = ''
 
 
 def strip_cols(full_col):
@@ -101,13 +101,14 @@ def upload_works(request) -> HttpResponse:
 
 def home_works(request) -> HttpResponse:
     cart = request.session.get('cart', {})
-    global search_field
+    search_field = request.session.get("work_search", "")
     # cols = strip_cols(Work._meta.get_fields())
 
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
         if form.is_valid():
             search_field = form.cleaned_data['search_text']
+            request.session["work_search"] = search_field
     else:
         form = SearchForm(initial={'search_text': search_field})
 
@@ -122,6 +123,7 @@ def home_works(request) -> HttpResponse:
         Q(depth__contains=search_field) | Q(size_note__contains=search_field) | \
         Q(condition__contains=search_field) | Q(category__contains=search_field)
     page_number = request.GET.get('page')
+    sort_field = request.session.get('work_sort', 'id')
     if sort_field.startswith('-'):
         work_list = Work.objects.all().filter(search).order_by(F(sort_field[1:]).asc(nulls_last=True), F("id"))
     else:
@@ -140,8 +142,7 @@ def home_works(request) -> HttpResponse:
 
 
 def clear_work(request):
-    global search_field
-    search_field = ''
+    request.session["work_search"] = ''
     return redirect('home_works')
 
 
@@ -218,14 +219,12 @@ def download_works(request):
 
 
 def work_sort(request, column):
-    global sort_field
-    sort_field = column
+    request.session['work_sort'] = column
     return redirect('home_works')
 
 
 def work_reverse_sort(request, column):
-    global sort_field
-    sort_field = f'-{column}'
+    request.session['work_sort'] = f'-{column}'
     return redirect('home_works')
 
 
