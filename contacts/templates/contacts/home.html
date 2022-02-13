@@ -38,17 +38,17 @@
         <tr height="35px">
             {% include "./edit_buttons.html" %}
             <td>{{ contact.id }}</td>
-            <td nowrap>{{ contact.title }}</td>
-            <td><div class="truncate">{{ contact.first_name }}</div></td>
-            <td><div class="truncate">{{ contact.last_name }}</div></td>
-            <td>{{ contact.phone_number }}</td>
-            <td><div class="truncate">{{ contact.email_address }}</div></td>
-            <td><div class="truncate">{{ contact.company_name }}</div></td>
-            <td><div class="truncate">{{ contact.address }}</div></td>
-            <td><div class="truncate">{{ contact.city }}</div></td>
-            <td><div class="truncate">{{ contact.country }}</div></td>
-            <td class="truncate">{{ contact.state }}</td>
-            <td class="truncate">{{ contact.post_code }}</td>
+            <td nowrap>{{ contact.title |default_if_none:""}}</td>
+            <td><div class="truncate">{{ contact.first_name|default_if_none:"" }}</div></td>
+            <td><div class="truncate">{{ contact.last_name|default_if_none:"" }}</div></td>
+            <td>{{ contact.phone_number|default_if_none:"" }}</td>
+            <td><div class="truncate">{{ contact.email_address|default_if_none:"" }}</div></td>
+            <td><div class="truncate">{{ contact.company_name|default_if_none:"" }}</div></td>
+            <td><div class="truncate">{{ contact.address|default_if_none:"" }}</div></td>
+            <td><div class="truncate">{{ contact.city|default_if_none:"" }}</div></td>
+            <td><div class="truncate">{{ contact.country|default_if_none:"" }}</div></td>
+            <td class="truncate">{{ contact.state|default_if_none:"" }}</td>
+            <td class="truncate">{{ contact.post_code|default_if_none:"" }}</td>
             {% include "./edit_buttons.html" %}
         </tr>
       {% endfor %}

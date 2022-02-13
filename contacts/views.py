@@ -11,8 +11,8 @@ from datetime import datetime
 from django.http import HttpResponse
 
 
-sort_field = 'id'
-search_field = ''
+# sort_field = 'id'
+# search_field = ''
 
 
 def strip_cols(full_col):
@@ -21,12 +21,13 @@ def strip_cols(full_col):
 
 
 def home_contacts(request):
-    global search_field
+    search_field = request.session.get("contact_search", "")
     # cols = strip_cols(Contact._meta.get_fields())
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
         if form.is_valid():
             search_field = form.cleaned_data['search_text']
+            request.session["contact_search"] = search_field
     else:
         form = SearchForm(initial={'search_text': search_field})
     search = Q(last_name__contains=search_field) | Q(id__contains=search_field) | \
@@ -37,7 +38,8 @@ def home_contacts(request):
         Q(state__contains=search_field) | Q(post_code__contains=search_field)
 
     page_number = request.GET.get('page')
-    # contacts_list = Contact.objects.all().filter(search).order_by(sort_field, "id")
+    sort_field = request.session.get('contact_sort', 'id')
+    request.session["work_search"] = sort_field
     if sort_field.startswith('-'):
         contacts_list = Contact.objects.all().filter(search).order_by(F(sort_field[1:]).asc(nulls_last=True), F("id"))
     else:
@@ -110,14 +112,12 @@ def contact_view(request, id, ids) -> HttpResponse:
 
 
 def sort_contact(request, column):
-    global sort_field
-    sort_field = column
+    request.session['contact_sort'] = column
     return redirect('home_contacts')
 
 
 def reverse_sort_contact(request, column):
-    global sort_field
-    sort_field = f'-{column}'
+    request.session['contact_sort'] = f'-{column}'
     return redirect('home_contacts')
 
 
@@ -138,7 +138,6 @@ def read_file(file_name):
 
 
 def load_contacts(request):
-    print('read', request)
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -168,6 +167,5 @@ def download_contacts(request):
 
 
 def clear_contact(request):
-    global search_field
-    search_field = ''
+    request.session["contact_search"] = ''
     return redirect('home_contacts')

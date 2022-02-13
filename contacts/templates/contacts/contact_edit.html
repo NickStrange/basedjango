@@ -4,6 +4,10 @@
     <div class="content-section">
       <form method="POST">
         {% csrf_token %}
+        <div class="form-group">
+          <button class="btn btn-outline-info" type="submit">Commit</button>
+          <a href = "{% url 'home_contacts' %}" class="btn btn-outline-info">Cancel</a>
+        </div>
         <fieldset class="form-group">
           {{ form|crispy }}
         </fieldset>
