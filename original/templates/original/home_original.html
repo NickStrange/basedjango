@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
          <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-4">
               <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                   {{ form }}
@@ -11,29 +11,12 @@
                   <a href="{% url 'clear_original' %}"><i class="fas fa-backspace fa-xs"></i></a>
               </form>
             </div>
+            <div class="col-md-6">
+                {% include "./pages.html" %}
+            </div>
         </div>
     </div>
 
-<div class="mt-2">
-      Page:
-      {% if old_works.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ works.previous_page_number }}">Previous</a>
-      {% endif %}
-
-      {% for num in old_works.paginator.page_range %}
-        {% if old_works.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > old_works.number|add:'-3' and num < old_works.number|add:'3' %}
-          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if old_works.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ old_works.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ old_works.paginator.num_pages }}">Last</a>
-      {% endif %}
-    </div>
 
     <table>
       <tr>
@@ -125,25 +108,6 @@
       {% endfor %}
     </table>
 
-<div class="mt-2">
-      Page:
-      {% if old_works.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ works.previous_page_number }}">Previous</a>
-      {% endif %}
-
-      {% for num in old_works.paginator.page_range %}
-        {% if old_works.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > old_works.number|add:'-3' and num < old_works.number|add:'3' %}
-          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if old_works.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ old_works.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ old_works.paginator.num_pages }}">Last</a>
-      {% endif %}
-    </div>
+    {% include "./pages.html" %}
 
 {% endblock content %}

@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 {% load contacttags %}
-      <form method="POST" enctype="multipart/form-data">
-        <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_contact' %}">Create new Contact</a>
-        {% csrf_token %}
-          {{ form }}
-          <button type="submit"><i class="fas fa-search fa-xs"></i></button>
-          <a href="{% url 'clear_contact' %}"><i class="fas fa-backspace fa-xs"></i></a>
-      </form>
+    <div class="container">
+         <div class="row">
+            <div class="col-md-5">
+              <form method="POST" enctype="multipart/form-data">
+                <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_contact' %}">Create new Contact</a>
+                {% csrf_token %}
+                  {{ form }}
+                  <button type="submit"><i class="fas fa-search fa-xs"></i></button>
+                  <a href="{% url 'clear_contact' %}"><i class="fas fa-backspace fa-xs"></i></a>
+              </form>
+          </div>
+          <div class="col-md-6">
+             {% include "./pages.html" %}
+          </div>
+        </div>
+    </div>
 <table>
     <thead>
         <tr>
@@ -42,23 +51,6 @@
     </tbody>
 </table>
     <div class="mt-2">
-      Page:
-      {% if contacts.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.previous_page_number }}">Previous</a>
-      {% endif %}
-
-      {% for num in contacts.paginator.page_range %}
-        {% if contacts.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > contacts.number|add:'-3' and num < contacts.number|add:'3' %}
-          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if contacts.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ contacts.paginator.num_pages }}">Last</a>
-      {% endif %}
+       {% include "./pages.html" %}
     </div>
 {% endblock content %}
