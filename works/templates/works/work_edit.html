@@ -2,28 +2,13 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    <div>
-    {% if work.file1 %}
-      <img width="20%" src="{% static 'thumbs/'%}{{work.file1}}"/>
-    {% endif %}
-    {% if work.file2 %}
-      <img width="20%" src="{% static 'thumbs/'%}{{work.file2}}"/>
-    {% endif %}
-    {% if work.file3 %}
-      <img width="20%" src="{% static 'thumbs/'%}{{work.file3}}"/>
-    {% endif %}
-    {% if work.file4 %}
-      <img width="20%" src="{% static 'thumbs/'%}{{work.file4}}"/>
-    {% endif %}
-    {% if work.file5 %}
-      <img width="20%" src="{% static 'thumbs/'%}{{work.file5}}"/>
-    {% endif %}
-    </div>
+    id: {{ work.id }} item_id:{{ work.item_id }} category:{{ work.category }} inventory_date:{{ form.inventory_date }}
+
+    {% include "./display_images.html" %}
 
     <div class="content-section">
       <form method="POST">
         {% csrf_token %}
-        id: {{ work.id }} item_id:{{ work.item_id }} category:{{ work.category }} inventory_date:{{ form.inventory_date }}
         <fieldset class="form-group">
           <legend class="border-bottom mb-4">Edit</legend>
           {{ form.source|as_crispy_field }}

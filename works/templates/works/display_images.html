@@ -1,0 +1,56 @@
+{% load static %}
+
+<div class="row">
+              {% if work.file1 %}
+                <div class="col-2" >
+                  <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file1}}">
+                      <img class="img-fluid" src="{% static 'thumbs/'%}{{work.file1}}"/>
+                  </button>
+                </div>
+              {% endif %}
+              {% if work.file2 %}
+              <div class="col-2">
+                  <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file2}}">
+                      <img class="img-fluid" src="{% static 'thumbs/'%}{{work.file2}}"/>
+                  </button>
+              </div>
+              {% endif %}
+              {% if work.file3 %}
+              <div class="col-2">
+                  <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file3}}">
+                      <img class="img-fluid" src="{% static 'thumbs/'%}{{work.file3}}"/>
+                  </button>
+              </div>
+              {% endif %}
+              {% if work.file4 %}
+              <div class="col-2">
+                  <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file4}}">
+                      <img class="img-fluid" src="{% static 'thumbs/'%}{{work.file4}}"/>
+                  </button>
+              </div>
+              {% endif %}
+              {% if work.file5 %}
+              <div class="col-2">
+                  <button type="button" class="btn bg-transparent" data-toggle="modal" data-target="#imageModal" data-image_id="{% static 'thumbs/'%}{{work.file5}}">
+                      <img class="img-fluid" src="{% static 'thumbs/'%}{{work.file5}}"/>
+                  </button>
+              </div>
+              {% endif %}
+        </div>
+        <div class="row mb-2">
+            {% if work.file1 %}
+                <div class="col-2">{{work.file1}}</div>
+            {% endif %}
+            {% if work.file2 %}
+                <div class="col-2">{{work.file2}}</div>
+            {% endif %}
+            {% if work.file3 %}
+                <div class="col-2">{{work.file3}}</div>
+            {% endif %}
+            {% if work.file4 %}
+                <div class="col-2">{{work.file4}}</div>
+            {% endif %}
+            {% if work.file5 %}
+                <div class="col-2">{{work.file5}}</div>
+            {% endif %}
+        </div>
