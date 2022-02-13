@@ -128,10 +128,13 @@ def home_works(request) -> HttpResponse:
         work_list = Work.objects.all().filter(search).order_by(F(sort_field).desc(nulls_last=True), F("id"))
     paginator = Paginator(work_list, 15)
     page_object = paginator.get_page(page_number)
+    work_ids = ",".join([str(work.id) for work in page_object])
+    print('work_id', work_ids)
     context = {
         'form': form,
         'works': page_object,
-        'cols': strip_cols(Work._meta.get_fields())
+        'cols': strip_cols(Work._meta.get_fields()),
+        'ids': work_ids
     }
     return render(request, "works/home_works.html", context=context)
 
@@ -178,13 +181,19 @@ def delete_work(request, id):
     return render(request, "works/delete_work.html", {'work': work})
 
 
-def view_work(request, id) -> HttpResponse:
-    last = 1 if id == 1 else id-1
-    next = id+1
+def view_work(request, id, ids) -> HttpResponse:
+    id_nums = ids.split(',')
+    offset = id_nums.index(str(id))
+    if offset < 0:
+        raise ValueError(f"Can't find {id}")
+    last = 0 if offset == 0 else int(id_nums[offset -1])
+    next = 0 if offset >= len(id_nums) - 1 else int(id_nums[offset + 1])
+    print('id', id, 'offset', offset, 'last', last, 'next', next, 'ids', id_nums)
     context = {
         'work': Work.objects.get(id=id),
         'last': last,
-        'next': next
+        'next': next,
+        'ids': ids
     }
     return render(request, 'works/view_work.html', context)
 

@@ -7,7 +7,7 @@ from .views import download_works, \
 urlpatterns = [
     path('', home_works, name='home_works'),
     path('test', work_test, name='test_work'),
-    path('work/<int:id>', view_work, name='view_work'),
+    path('work/<int:id>/<ids>', view_work, name='view_work'),
     path('upload/', upload_works, name='upload_works'),
     path('download/', download_works, name='download_works'),
     path('clear-work/', clear_work, name='clear_work'),

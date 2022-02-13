@@ -3,9 +3,11 @@
 {% block content %}
     <a class="btn btn-secondary" href="{% url 'home_works' %}">Return</a>
     {% if last > 0 %}
-        <a class="btn btn-secondary" href="{% url 'view_work' last %}">Previous</a>
+        <a class="btn btn-secondary" href="{% url 'view_work' last ids %}">Previous</a>
     {% endif %}
-    <a class="btn btn-secondary" href="{% url 'view_work' next %}">Next</a>
+    {% if next > 0 %}
+        <a class="btn btn-secondary" href="{% url 'view_work' next ids %}">Next</a>
+    {% endif %}
     <div class="container">
         <div class="row">
             <div class="col-3">Item id:</div><div class="col-9">{{ work.item_id }}</div>
@@ -44,9 +46,13 @@
               <img width="250px" src="{% static 'thumbs/'%}{{work.file5}}"/>
           {% endif %}
     </div>
-    <a class="btn btn-secondary" href="{% url 'home_works' %}">Return</a>
-    {% if last > 0 %}
-        <a class="btn btn-secondary" href="{% url 'view_work' last %}">Previous</a>
-    {% endif %}
-    <a class="btn btn-secondary" href="{% url 'view_work' next %}">Next</a>
+    <div>
+        <a class="btn btn-secondary" href="{% url 'home_works' %}">Return</a>
+        {% if last > 0 %}
+            <a class="btn btn-secondary" href="{% url 'view_work' last ids %}">Previous</a>
+        {% endif %}
+        {% if next > 0 %}
+            <a class="btn btn-secondary" href="{% url 'view_work' next ids %}">Next</a>
+        {% endif %}
+    </div>
 {% endblock content %}

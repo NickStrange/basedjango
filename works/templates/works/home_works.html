@@ -31,7 +31,7 @@
             <th></th>
             {% for col in cols %}
                 {% if "file" not in col %}
-                <th nowrap><a  class="mb-1" href="{% url 'sort_work' col %}"><i class="fas fa-sort-up"></i></a>
+                <th nowrap><a  class="mb-1" href="{% url 'sort_work' col%}"><i class="fas fa-sort-up"></i></a>
                     {{ col }}
                 <a  class="mb-1" href="{% url 'reverse_sort_work' col %}"><i class="fas fa-sort-down"></i></a></th>
                 {% else %}
@@ -43,7 +43,7 @@
 
       {% for work in works %}
           <tr height="35px">
-            <td><a class="mb-1" href="{% url 'view_work' work.id %}"><i class="fas fa-eye"></i></a></td>
+            <td><a class="mb-1" href="{% url 'view_work' work.id ids %}"><i class="fas fa-eye"></i></a></td>
             <td><a class="mb-1" href="{% url 'edit_work' work.id %}"><i class="fas fa-edit"></i></a></td>
             <td><a class="mb-1 me-2" href="{% url 'delete_work' work.id %}"><i class="fas fa-trash"></i></a></td>
             <td>{{ work.id }}</td>
