@@ -9,10 +9,7 @@ from django.db.models import Q, F
 from django.core.paginator import Paginator
 from datetime import datetime
 from django.http import HttpResponse
-
-
-# sort_field = 'id'
-# search_field = ''
+from django.urls import reverse
 
 
 def strip_cols(full_col):
@@ -39,7 +36,7 @@ def home_contacts(request):
 
     page_number = request.GET.get('page')
     sort_field = request.session.get('contact_sort', 'id')
-    request.session["work_search"] = sort_field
+    request.session["contact_sort"] = sort_field
     if sort_field.startswith('-'):
         contacts_list = Contact.objects.all().filter(search).order_by(F(sort_field[1:]).asc(nulls_last=True), F("id"))
     else:
@@ -69,7 +66,10 @@ def contact_edit(request, id):
             return redirect('home_contacts')
     else:
         form = ContactForm(instance=contact)
-    return render(request, "contacts/contact_edit.html", {'form': form})
+    context = {'form': form,
+               'contact': Contact.objects.get(id=id),
+               'home': reverse('home_contacts')}
+    return render(request, "contacts/contact_edit.html", context)
 
 
 def create_contact(request):
@@ -82,7 +82,9 @@ def create_contact(request):
             return redirect('home_contacts')
     else:
         form = ContactForm()
-    return render(request, "contacts/create_contact.html", {'form': form})
+    context = {'form': form,
+               'home': reverse('home_contacts')}
+    return render(request, "contacts/create_contact.html", context)
 
 
 def contact_delete(request, id):

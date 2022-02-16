@@ -6,6 +6,8 @@
 
     <div class="container">
         <div class="row">
+            <div class="col-3">Id</div><div class="col-9">{{ contact.id|default_if_none:"" }}</div>
+            <div class="col-3">Contact Date:</div><div class="col-9">{{ contact.contact_date|default_if_none:"" }}</div>
             <div class="col-3">Title:</div><div class="col-9">{{ contact.title|default_if_none:"" }}</div>
             <div class="col-3">First Name:</div><div class="col-9">{{ contact.first_name|default_if_none:"" }}</div>
             <div class="col-3">Last Name:</div><div class="col-9">{{ contact.last_name|default_if_none:"" }}</div>

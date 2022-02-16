@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 sort_field = 'first_name'
 
@@ -16,6 +17,7 @@ class Contact(models.Model):
     country = models.CharField(max_length=24, null=True, blank=True)
     state = models.CharField(max_length=24, null=True, blank=True)
     post_code = models.CharField(max_length=24, null=True, blank=True)
+    contact_date = models.DateField(null=True, blank=True, default=timezone.now)
 
     def save(self, *args, **kwargs):
         if not self.title:
@@ -40,6 +42,9 @@ class Contact(models.Model):
             self.country = None
         if not self.post_code:
             self.post_code = None
+        print ("DATE", self.contact_date, "____")
+        if not self.contact_date:
+            self.contact_date = timezone.now()
         super(Contact, self).save(*args, **kwargs)
 
     def __str__(self):

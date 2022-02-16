@@ -2,17 +2,14 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    id: {{ work.id }} item_id:{{ work.item_id }} category:{{ work.category }} inventory_date:{{ form.inventory_date }}
+    Id: {{ work.id }} Item Id:{{ work.item_id }} Category:{{ work.category }} Inventory Date:{{ form.inventory_date }}
 
     {% include "./display_images.html" %}
 
     <div class="content-section">
       <form method="POST">
         {% csrf_token %}
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Commit</button>
-          <a href = "{% url 'home_works' %}" class="btn btn-outline-info">Cancel</a>
-        </div>
+        {% include "commit_rollback.html" %}
         <fieldset class="form-group">
           {{ form.source|as_crispy_field }}
           {{ form.notes|as_crispy_field }}
@@ -36,5 +33,6 @@
         </fieldset>
       </form>
     </div>
+    {% include "commit_rollback.html" %}
 
 {% endblock content %}

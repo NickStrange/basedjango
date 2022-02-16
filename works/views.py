@@ -14,9 +14,7 @@ from django.core.management.color import no_style
 from django.db import connection
 from django.core.paginator import Paginator
 import sqlite3
-
-# sort_field = 'id'
-# search_field = ''
+from django.urls import reverse
 
 
 def strip_cols(full_col):
@@ -101,13 +99,16 @@ def upload_works(request) -> HttpResponse:
 
 def home_works(request) -> HttpResponse:
     cart = request.session.get('cart', {})
+    print('request.session', str(request.session['work_search']))
     search_field = request.session.get("work_search", "")
+    print('search field', search_field)
     # cols = strip_cols(Work._meta.get_fields())
 
     if request.method == 'POST':
         form = SearchForm(request.POST, initial={'search_text': search_field})
         if form.is_valid():
             search_field = form.cleaned_data['search_text']
+            print ("new search", search_field)
             request.session["work_search"] = search_field
     else:
         form = SearchForm(initial={'search_text': search_field})
@@ -136,13 +137,15 @@ def home_works(request) -> HttpResponse:
         'form': form,
         'works': page_object,
         'cols': strip_cols(Work._meta.get_fields()),
-        'ids': work_ids
+        'ids': work_ids,
     }
     return render(request, "works/home_works.html", context=context)
 
 
 def clear_work(request):
     request.session["work_search"] = ''
+    print('clear work')
+    print('request.session after clear', str(request.session['work_search']))
     return redirect('home_works')
 
 
@@ -156,7 +159,9 @@ def create_work(request):
             return redirect('home_works')
     else:
         form = WorkDDLForm()
-    return render(request, "works/create_work.html", {'form': form})
+    context = {'form': form,
+               'home': reverse('home_works')}
+    return render(request, "create_work.html", context)
 
 
 def edit_work(request, id):
@@ -170,7 +175,11 @@ def edit_work(request, id):
     else:
         form = WorkDDLForm(instance=work)
         work = Work.objects.get(id=id)
-    return render(request, "works/work_edit.html", {'form': form, 'work': work})
+
+    context = {'form': form,
+               'work': work,
+               'home': reverse('home_works')}
+    return render(request, "works/work_edit.html", context)
 
 
 def delete_work(request, id):

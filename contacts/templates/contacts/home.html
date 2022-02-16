@@ -49,6 +49,7 @@
             <td><div class="truncate">{{ contact.country|default_if_none:"" }}</div></td>
             <td class="truncate">{{ contact.state|default_if_none:"" }}</td>
             <td class="truncate">{{ contact.post_code|default_if_none:"" }}</td>
+            <td class="truncate">{{ contact.contact_date|default_if_none:"" }}</td>
             {% include "./edit_buttons.html" %}
         </tr>
       {% endfor %}

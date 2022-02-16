@@ -8,25 +8,26 @@
 
     <div class="container">
         <div class="row">
+            <div class="col-3">Id:</div><div class="col-9">{{ work.id }}</div>
+            <div class="col-3">Inventory Date:</div><div class="col-9">{{ work.inventory_date }}</div>
             <div class="col-3">Item id:</div><div class="col-9">{{ work.item_id }}</div>
             <div class="col-3">Category:</div><div class="col-9">{{ work.get_category_display }}</div>
             <div class="col-3">Source:</div><div class="col-9">{{ work.get_source_display }}</div>
-            <div class="col-3">Notes:</div><div class="col-9">{{ work.notes }}</div>
-            <div class="col-3">Location:</div><div class="col-9">{{ work.location }}</div>
+            <div class="col-3">Notes:</div><div class="col-9">{{ work.notes|default_if_none:"" }}</div>
+            <div class="col-3">Location:</div><div class="col-9">{{ work.location|default_if_none:"" }}</div>
             <div class="col-3">Value:</div><div class="col-9">{{ work.value|default_if_none:"" }}</div>
-            <div class="col-3">Inventory Date:</div><div class="col-9">{{ work.inventory_date }}</div>
-            <div class="col-3">Title:</div><div class="col-9">{{ work.title }}</div>
-            <div class="col-3">Series:</div><div class="col-9">{{ work.series }}</div>
+            <div class="col-3">Title:</div><div class="col-9">{{ work.title|default_if_none:"" }}</div>
+            <div class="col-3">Series:</div><div class="col-9">{{ work.series|default_if_none:"" }}</div>
             <div class="col-3">Date Year:</div><div class="col-9">{{ work.date_year }}</div>
             <div class="col-3">Medium:</div><div class="col-9">{{ work.medium }}</div>
-            <div class="col-3">Signature:</div><div class="col-9">{{ work.signature_and_writing }}</div>
-            <div class="col-3">Condition:</div><div class="col-9">{{ work.condition }}</div>
+            <div class="col-3">Signature:</div><div class="col-9">{{ work.signature_and_writing|default_if_none:"" }}</div>
+            <div class="col-3">Condition:</div><div class="col-9">{{ work.condition|default_if_none:"" }}</div>
             <div class="row">
                 <div class="col-3">Height:</div><div class="col-1">{{ work.height|default_if_none:"   "  }}</div>
                 <div class="col-3">Width:</div><div class="col-1">{{ work.width|default_if_none:"   "  }}</div>
                 <div class="col-3">Depth:</div><div class="col-1">{{ work.depth|default_if_none:"   "  }}</div>
             </div>
-            <div class="col-3">Size Note:</div><div class="col-9">{{ work.size_note }}</div>
+            <div class="col-3">Size Note:</div><div class="col-9">{{ work.size_note|default_if_none:"" }}</div>
         </div>
     </div>
 

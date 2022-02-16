@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+    Id: {{ contact.id }} Contact Date:{{ contact.contact_date }}
+
     <div class="content-section">
       <form method="POST">
+        {% include "commit_rollback.html" %}
         {% csrf_token %}
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Commit</button>
-          <a href = "{% url 'home_contacts' %}" class="btn btn-outline-info">Cancel</a>
-        </div>
         <fieldset class="form-group">
-          {{ form|crispy }}
+         {{ form.title|as_crispy_field }}
+         {{ form.first_name|as_crispy_field }}
+         {{ form.last_name|as_crispy_field }}
+         {{ form.phone_number|as_crispy_field }}
+         {{ form.email_address|as_crispy_field }}
+         {{ form.company_name|as_crispy_field }}
+         {{ form.address|as_crispy_field }}
+         {{ form.city|as_crispy_field }}
+         {{ form.country|as_crispy_field }}
+         {{ form.state|as_crispy_field }}
+         {{ form.post_code|as_crispy_field }}
         </fieldset>
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit">Commit</button>
-          <a href = "{% url 'home_contacts' %}" class="btn btn-outline-info">Cancel</a>
-        </div>
       </form>
     </div>
+    {% include "commit_rollback.html" %}
 
 {% endblock content %}
