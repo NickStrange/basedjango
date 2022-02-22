@@ -5,11 +5,13 @@
          <div class="row">
             <div class="col-md-5">
               <form method="POST" enctype="multipart/form-data">
-                <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_contact' %}">Create new Contact</a>
+                {% if perms.contacts.add_contact %}
+                    <a class="btn btn-outline-secondary m-3 btn-sm"  href="{% url 'create_contact' %}">Create new Contact</a>
+                {% endif %}
                 {% csrf_token %}
-                  {{ form }}
-                  <button type="submit"><i class="fas fa-search fa-xs"></i></button>
-                  <a href="{% url 'clear_contact' %}"><i class="fas fa-backspace fa-xs"></i></a>
+                {{ form }}
+                <button type="submit"><i class="fas fa-search fa-xs"></i></button>
+                <a href="{% url 'clear_contact' %}"><i class="fas fa-backspace fa-xs"></i></a>
               </form>
           </div>
           <div class="col-md-6">

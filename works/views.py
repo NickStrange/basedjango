@@ -99,7 +99,6 @@ def upload_works(request) -> HttpResponse:
 
 def home_works(request) -> HttpResponse:
     cart = request.session.get('cart', {})
-    print('request.session', str(request.session['work_search']))
     search_field = request.session.get("work_search", "")
     print('search field', search_field)
     # cols = strip_cols(Work._meta.get_fields())

@@ -1,3 +1,14 @@
-            <td><a class="mb-1" href="{% url 'contact_view' contact.id ids %}"><i class="fas fa-eye"></i></a></td>
-            <td><a class="mb-1" href="{% url 'contact_edit' contact.id %}"><i class="fas fa-edit"></i></a></td>
-            <td><a class="mb-1 me-2" href="{% url 'contact_delete' contact.id %}"><i class="fas fa-trash"></i></a></td>
+
+<td>
+    <a class="mb-1" href="{% url 'contact_view' contact.id ids %}"><i class="fas fa-eye"></i></a>
+</td>
+<td>
+    {% if perms.contacts.change_contact %}
+        <a class="mb-1" href="{% url 'contact_edit' contact.id %}"><i class="fas fa-edit"></i></a>
+    {% endif %}
+</td>
+<td>
+    {% if perms.contacts.delete_contact %}
+        <a class="mb-1 me-2" href="{% url 'contact_delete' contact.id %}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+</td>

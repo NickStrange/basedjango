@@ -33,30 +33,43 @@
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="navbar-nav mr-auto">
           <a class="nav-item nav-link" href="{% url 'home_chooser' %}">Switch</a>
-          {% if not request.session.choice or request.session.choice == "Work" %}
-              <a class="nav-item nav-link" href="{% url 'home_works' %}">Works_Home</a>
-          {% elif request.session.choice == "Original" %}
-              <a class="nav-item nav-link" href="{% url 'home_original' %}">Original_Home</a>
-          {% else %}
-              <a class="nav-item nav-link" href="{% url 'home_contacts' %}">Contacts_Home</a>
+        </div>
+        <div class="navbar-nav ">
+          {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="#">{{ request.user.username }} {{ request.session.choice}}</a>
+              {% if request.session.choice == "Contacts" %}
+                  <a class="nav-item nav-link" href="{% url 'home_contacts' %}">Home</a>
+                  <a class="nav-item nav-link" href="#">add:{{ perms.contacts.add_contact }}</a>
+                  <a class="nav-item nav-link" href="#">update: {{ perms.contacts.change_contact }}</a>
+                  <a class="nav-item nav-link" href="#">delete: {{ perms.contacts.delete_contact }}</a>
+              {% elif not request.session.choice or request.session.choice == "Work" %}
+                  <a class="nav-item nav-link" href="{% url 'home_works' %}">Home</a>
+                  <a class="nav-item nav-link" href="#">add:{{ perms.works.add_work }}</a>
+                  <a class="nav-item nav-link" href="#">update: {{ perms.works.change_work }}</a>
+                  <a class="nav-item nav-link" href="#">delete: {{ perms.works.delete_work }}</a>
+              {% elif request.session.choice == "Original" %}
+                  <a class="nav-item nav-link" href="{% url 'home_original' %}">Home</a>
+                  <a class="nav-item nav-link" href="#">add:{{ perms.original.add_oldwork }}</a>
+                  <a class="nav-item nav-link" href="#">update: {{ perms.original.change_oldwork }}</a>
+                  <a class="nav-item nav-link" href="#">delete: {{ perms.original.delete_oldwork }}</a>
+              {% endif %}
           {% endif %}
         </div>
-          {{ request.user.username }}{{ request.user.is_superuser }} {{ request.session.choice }}
-        <!-- Navbar Right Side -->
+          <!-- Navbar Right Side -->
         <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
               {% if not request.session.choice or request.session.choice == "Work" %}
-                  <a class="nav-item nav-link" href="{% url 'download_works' %}">Download Works</a>
+                  <a class="nav-item nav-link" href="{% url 'download_works' %}">Download</a>
                   {% if request.user.is_superuser %}
-                      <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload Works</a>
+                      <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload</a>
                   {% endif %}
               {% elif request.session.choice == "Original" %}
-                  <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download Original</a>
-                  <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload Original</a>
+                  <a class="nav-item nav-link" href="{% url 'download_old_works' %}">Download</a>
+                  <a class="nav-item nav-link" href="{% url 'upload_old_works' %}">Upload</a>
             {% else %}
-                  <a class="nav-item nav-link" href="{% url 'download_contacts' %}">Download Contacts</a>
+                  <a class="nav-item nav-link" href="{% url 'download_contacts' %}">Download</a>
                   {% if request.user.is_superuser %}
-                      <a class="nav-item nav-link" href="{% url 'load_contacts' %}">Upload Contacts</a>
+                      <a class="nav-item nav-link" href="{% url 'load_contacts' %}">Upload</a>
                   {% endif %}
               {% endif %}
                <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>

@@ -47,8 +47,6 @@ def home_contacts(request):
     work_ids = ",".join([str(work.id) for work in page_object])
     context = {
         'form': form,
-        # 'contacts': Contact.objects.all().filter(search).order_by(sort_field, "id"),
-        #'page_obj': page_object,
         'contacts': page_object,
         'cols': strip_cols(Contact._meta.get_fields()),
         'ids': work_ids
