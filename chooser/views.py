@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 
 
-def home_chooser(request):
-    if request.session.get("choice") == 'Contacts':
-        request.session['choice'] = 'Work'
+def home_chooser(request, home_type):
+    if home_type == "work":
+        request.session['choice'] = 'Works'
         return redirect('home_works')
-    elif request.session.get("choice") == 'Work':
+    elif home_type == 'original':
         if not request.user.is_superuser:
             request.session['choice'] = 'Contacts'
             return redirect('home_contacts')

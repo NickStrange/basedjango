@@ -103,4 +103,8 @@ table th { border-left:1px solid grey; background: #BBB;}
   }
 }
 
+.dropdown-item{
+  color: white;
+}
+
 

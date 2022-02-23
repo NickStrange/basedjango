@@ -30,10 +30,20 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
+      <div class="dropdown">
+        {% if user.is_authenticated %}
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+              Choose</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'home_chooser' 'contact' %}">Contacts</a>
+                <a class="dropdown-item" href="{% url 'home_chooser' 'work' %}">Works</a>
+                {% if request.user.is_superuser %}
+                    <a class="dropdown-item" href="{% url 'home_chooser' 'original' %}">Original</a>
+                {% endif %}
+            </div>
+        {% endif %}
+      </div>
       <div class="collapse navbar-collapse" id="navbarToggle">
-        <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link" href="{% url 'home_chooser' %}">Switch</a>
-        </div>
         <div class="navbar-nav ">
           {% if user.is_authenticated %}
             <a class="nav-item nav-link" href="#">{{ request.user.username }} {{ request.session.choice}}</a>
@@ -42,7 +52,7 @@
                   <a class="nav-item nav-link" href="#">add:{{ perms.contacts.add_contact }}</a>
                   <a class="nav-item nav-link" href="#">update: {{ perms.contacts.change_contact }}</a>
                   <a class="nav-item nav-link" href="#">delete: {{ perms.contacts.delete_contact }}</a>
-              {% elif not request.session.choice or request.session.choice == "Work" %}
+              {% elif not request.session.choice or request.session.choice == "Works" %}
                   <a class="nav-item nav-link" href="{% url 'home_works' %}">Home</a>
                   <a class="nav-item nav-link" href="#">add:{{ perms.works.add_work }}</a>
                   <a class="nav-item nav-link" href="#">update: {{ perms.works.change_work }}</a>
@@ -58,7 +68,7 @@
           <!-- Navbar Right Side -->
         <div class="navbar-nav ms-auto">
             {% if user.is_authenticated %}
-              {% if not request.session.choice or request.session.choice == "Work" %}
+              {% if not request.session.choice or request.session.choice == "Works" %}
                   <a class="nav-item nav-link" href="{% url 'download_works' %}">Download</a>
                   {% if request.user.is_superuser %}
                       <a class="nav-item nav-link" href="{% url 'upload_works' %}">Upload</a>
