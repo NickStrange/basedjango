@@ -10,13 +10,14 @@ from django.core.paginator import Paginator
 from datetime import datetime
 from django.http import HttpResponse
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 
 def strip_cols(full_col):
     result = [f.name for f in full_col]
     return result
 
-
+@login_required
 def home_contacts(request):
     search_field = request.session.get("contact_search", "")
     # cols = strip_cols(Contact._meta.get_fields())
@@ -54,6 +55,7 @@ def home_contacts(request):
     return render(request, "contacts/home.html", context=context)
 
 
+@login_required
 def contact_edit(request, id):
     contact = Contact.objects.get(id=id)
     if request.method == 'POST':
@@ -70,6 +72,7 @@ def contact_edit(request, id):
     return render(request, "contacts/contact_edit.html", context)
 
 
+@login_required
 def create_contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -85,6 +88,7 @@ def create_contact(request):
     return render(request, "contacts/create_contact.html", context)
 
 
+@login_required
 def contact_delete(request, id):
     contact = Contact.objects.get(id=id)
     if request.method == 'POST':
@@ -94,6 +98,7 @@ def contact_delete(request, id):
     return render(request, "contacts/delete_contact.html", {'contact': contact})
 
 
+@login_required
 def contact_view(request, id, ids) -> HttpResponse:
     id_nums = ids.split(',')
     offset = id_nums.index(str(id))
@@ -111,16 +116,19 @@ def contact_view(request, id, ids) -> HttpResponse:
     return render(request, 'contacts/view_contact.html', context)
 
 
+@login_required
 def sort_contact(request, column):
     request.session['contact_sort'] = column
     return redirect('home_contacts')
 
 
+@login_required
 def reverse_sort_contact(request, column):
     request.session['contact_sort'] = f'-{column}'
     return redirect('home_contacts')
 
 
+@login_required
 def read_file(file_name):
     file = file_name.read().decode('utf-8')
     reader = csv.DictReader(io.StringIO(file))
@@ -137,6 +145,7 @@ def read_file(file_name):
         print(contact)
 
 
+@login_required
 def load_contacts(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -148,6 +157,7 @@ def load_contacts(request):
     return render(request, "contacts/load-contacts.html", {'form': form})
 
 
+@login_required
 def download_contacts(request):
     now = datetime.now()  # current date and tim
     date_time = now.strftime("%m/%d/%Y")
@@ -166,6 +176,7 @@ def download_contacts(request):
     return response
 
 
+@login_required
 def clear_contact(request):
     request.session["contact_search"] = ''
     return redirect('home_contacts')

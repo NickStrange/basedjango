@@ -15,8 +15,8 @@ from io import StringIO
 from django.contrib import messages
 from django.core.paginator import Paginator
 from common.CategoryChoices import CategoryChoices
+from django.contrib.auth.decorators import login_required
 
-# original_search_field = ''
 
 SOURCE_CHOICES = [
     ('Aldo foundation', 'Aldo foundation'),
@@ -86,6 +86,7 @@ def check_null_category(category, item_id):
     return category if category else CategoryChoices.decode_item_id(item_id)
 
 
+@login_required
 def upload_old_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
     # check whether it's valid:
@@ -147,6 +148,7 @@ def upload_old_works(request) -> HttpResponse:
     return render(request, 'original/file_load.html', context)
 
 
+@login_required
 def home_original(request) -> HttpResponse:
     sort_field = "index"
     original_search_field = request.session.get("original_search", "")
@@ -183,6 +185,7 @@ def home_original(request) -> HttpResponse:
     return render(request, 'original/home_original.html', context)
 
 
+@login_required
 def download_old_works(request):
     now = datetime.now()  # current date and tim
     date_time = now.strftime("%m/%d/%Y")
@@ -206,6 +209,7 @@ def download_old_works(request):
     return response
 
 
+@login_required
 def clear_original(request):
     request.session["original_search"] = ''
     return redirect('home_original')

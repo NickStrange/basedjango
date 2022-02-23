@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def home_chooser(request, home_type):
     if home_type == "work":
         request.session['choice'] = 'Works'

@@ -15,6 +15,7 @@ from django.db import connection
 from django.core.paginator import Paginator
 import sqlite3
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 
 def strip_cols(full_col):
@@ -45,6 +46,7 @@ def set_seq(val):
     print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
 
 
+@login_required
 def upload_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
     clear_works()
@@ -97,10 +99,10 @@ def upload_works(request) -> HttpResponse:
     return render(request, 'works/file_load.html', context)
 
 
+@login_required
 def home_works(request) -> HttpResponse:
     cart = request.session.get('cart', {})
     search_field = request.session.get("work_search", "")
-    print('search field', search_field)
     # cols = strip_cols(Work._meta.get_fields())
 
     if request.method == 'POST':
@@ -131,7 +133,6 @@ def home_works(request) -> HttpResponse:
     paginator = Paginator(work_list, 15)
     page_object = paginator.get_page(page_number)
     work_ids = ",".join([str(work.id) for work in page_object])
-    print('work_id', work_ids)
     context = {
         'form': form,
         'works': page_object,
@@ -141,6 +142,7 @@ def home_works(request) -> HttpResponse:
     return render(request, "works/home_works.html", context=context)
 
 
+@login_required
 def clear_work(request):
     request.session["work_search"] = ''
     print('clear work')
@@ -148,6 +150,7 @@ def clear_work(request):
     return redirect('home_works')
 
 
+@login_required
 def create_work(request):
     if request.method == 'POST':
         form = WorkDDLForm(request.POST)
@@ -163,6 +166,7 @@ def create_work(request):
     return render(request, "create_work.html", context)
 
 
+@login_required
 def edit_work(request, id):
     work = Work.objects.get(id=id)
     if request.method == 'POST':
@@ -181,6 +185,7 @@ def edit_work(request, id):
     return render(request, "works/work_edit.html", context)
 
 
+@login_required
 def delete_work(request, id):
     work = Work.objects.get(id=id)
     if request.method == 'POST':
@@ -190,6 +195,7 @@ def delete_work(request, id):
     return render(request, "works/delete_work.html", {'work': work})
 
 
+@login_required
 def view_work(request, id, ids) -> HttpResponse:
     id_nums = ids.split(',')
     offset = id_nums.index(str(id))
@@ -207,6 +213,7 @@ def view_work(request, id, ids) -> HttpResponse:
     return render(request, 'works/view_work.html', context)
 
 
+@login_required
 def download_works(request):
     now = datetime.now()  # current date and tim
     date_time = now.strftime("%m/%d/%Y")
@@ -226,15 +233,18 @@ def download_works(request):
     return response
 
 
+@login_required
 def work_sort(request, column):
     request.session['work_sort'] = column
     return redirect('home_works')
 
 
+@login_required
 def work_reverse_sort(request, column):
     request.session['work_sort'] = f'-{column}'
     return redirect('home_works')
 
 
+@login_required
 def work_test(request):
     return render(request, 'works/test.html')
