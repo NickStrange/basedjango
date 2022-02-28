@@ -92,10 +92,7 @@ def upload_works(request) -> HttpResponse:
             work.save()
 
     context = {'form': form, }
-    print('next id ', max_id+1)
-    max_id = max_id if max_id > 5000 else 5000
     set_seq(max_id+1)
-    print('max', max_id)
     return render(request, 'works/file_load.html', context)
 
 

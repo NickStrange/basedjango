@@ -1,5 +1,6 @@
 import csv
 import io
+import sqlite3
 
 from django.shortcuts import render, redirect
 from .models import Contact
@@ -128,14 +129,39 @@ def reverse_sort_contact(request, column):
     return redirect('home_contacts')
 
 
-@login_required
+def clear_contacts():
+    Contact.objects.all().delete()
+
+
+def check_max(current_max, id):
+    try:
+        if int(id) > current_max:
+            current_max = int(id)
+        return current_max
+    except ValueError as e:
+        return current_max
+
+
+def set_seq(val):
+    connection_db = sqlite3.connect('db.sqlite3')
+    table_connection_db = connection_db.cursor()
+    table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
+    connection_db.commit()
+    connection_db.close()
+    print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
+
+
 def read_file(file_name):
     file = file_name.read().decode('utf-8')
     reader = csv.DictReader(io.StringIO(file))
+    clear_contacts()
+    max_id = 0
+    set_seq(0)
 
     # Generate a list comprehension
     data = [line for line in reader]
     for line in data:
+        max_id = check_max(max_id, line['id'])
         contact = Contact(id=line['id'], title=line['title'], first_name=line['first_name'],
                           last_name=line['last_name'], phone_number=line['phone_number'],
                           email_address=line['email_address'], company_name=line['company_name'],
@@ -143,6 +169,7 @@ def read_file(file_name):
                           country=line['country'], post_code=line['post_code'])
         contact.save()
         print(contact)
+    set_seq(max_id+1)
 
 
 @login_required
