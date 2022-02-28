@@ -20,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bvrxj1d042-9o977oyq&uadwxz^z+ehhn@qa5yxsy_f*o4k_o)'
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -125,7 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # STATIC_URL='/Users/nickstrange/PycharmProjects/foundation/basedjango/static/'
 
-STATICFILES_DIR = [os.path.join(BASE_DIR, '/static'),]
+STATICFILES_DIR = [os.path.join(BASE_DIR, '/static'), ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -135,7 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL='home_works'
+LOGIN_REDIRECT_URL = 'home_works'
 LOGIN_URL = 'login'
 
 EMAIL_HOST = "smtp.sendgrid.net"
