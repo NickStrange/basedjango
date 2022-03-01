@@ -1,6 +1,6 @@
 import csv
 import io
-import sqlite3
+# import sqlite3
 
 from django.shortcuts import render, redirect
 from .models import Contact
@@ -12,11 +12,13 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from db.set_sequence import set_seq
 
 
 def strip_cols(full_col):
     result = [f.name for f in full_col]
     return result
+
 
 @login_required
 def home_contacts(request):
@@ -142,13 +144,13 @@ def check_max(current_max, id):
         return current_max
 
 
-def set_seq(val):
-    connection_db = sqlite3.connect('db.sqlite3')
-    table_connection_db = connection_db.cursor()
-    table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
-    connection_db.commit()
-    connection_db.close()
-    print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
+# def set_seq(val):
+#     connection_db = sqlite3.connect('db.sqlite3')
+#     table_connection_db = connection_db.cursor()
+#     table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
+#     connection_db.commit()
+#     connection_db.close()
+#     print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
 
 
 def read_file(file_name):
@@ -156,7 +158,7 @@ def read_file(file_name):
     reader = csv.DictReader(io.StringIO(file))
     clear_contacts()
     max_id = 0
-    set_seq(0)
+    set_seq('contacts_contact', 0)
 
     # Generate a list comprehension
     data = [line for line in reader]
@@ -169,7 +171,7 @@ def read_file(file_name):
                           country=line['country'], post_code=line['post_code'])
         contact.save()
         print(contact)
-    set_seq(max_id+1)
+    set_seq('contacts_contact', max_id+1)
 
 
 @login_required

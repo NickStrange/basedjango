@@ -13,9 +13,10 @@ from django.contrib import messages
 from django.core.management.color import no_style
 from django.db import connection
 from django.core.paginator import Paginator
-import sqlite3
+# import sqlite3
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from db.set_sequence import  set_seq
 
 
 def strip_cols(full_col):
@@ -37,13 +38,13 @@ def check_max(current_max, id):
         return current_max
 
 
-def set_seq(val):
-    connection_db = sqlite3.connect('db.sqlite3')
-    table_connection_db = connection_db.cursor()
-    table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
-    connection_db.commit()
-    connection_db.close()
-    print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
+# def set_seq(val):
+#     connection_db = sqlite3.connect('db.sqlite3')
+#     table_connection_db = connection_db.cursor()
+#     table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
+#     connection_db.commit()
+#     connection_db.close()
+#     print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='works_work'")
 
 
 @login_required
@@ -52,7 +53,7 @@ def upload_works(request) -> HttpResponse:
     clear_works()
     # check whether it's valid:
     max_id = 0
-    set_seq(0)
+    set_seq('works_work', 0)
     if form.is_valid():
         file = form.cleaned_data['file_name']
         csvf = StringIO(file.read().decode())
@@ -92,7 +93,7 @@ def upload_works(request) -> HttpResponse:
             work.save()
 
     context = {'form': form, }
-    set_seq(max_id+1)
+    set_seq('works_work', max_id+1)
     return render(request, 'works/file_load.html', context)
 
 
