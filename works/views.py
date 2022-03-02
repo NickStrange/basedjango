@@ -53,7 +53,7 @@ def upload_works(request) -> HttpResponse:
     clear_works()
     # check whether it's valid:
     max_id = 0
-    set_seq('works_work', 0)
+    set_seq('works_work', 1)
     if form.is_valid():
         file = form.cleaned_data['file_name']
         csvf = StringIO(file.read().decode())
@@ -161,7 +161,7 @@ def create_work(request):
         form = WorkDDLForm()
     context = {'form': form,
                'home': reverse('home_works')}
-    return render(request, "create_work.html", context)
+    return render(request, "works/create_work.html", context)
 
 
 @login_required

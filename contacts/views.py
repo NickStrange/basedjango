@@ -158,7 +158,7 @@ def read_file(file_name):
     reader = csv.DictReader(io.StringIO(file))
     clear_contacts()
     max_id = 0
-    set_seq('contacts_contact', 0)
+    set_seq('contacts_contact', 1)
 
     # Generate a list comprehension
     data = [line for line in reader]
