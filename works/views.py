@@ -16,7 +16,7 @@ from django.core.paginator import Paginator
 # import sqlite3
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from db.set_sequence import  set_seq
+from db.set_sequence import set_seq
 
 
 def strip_cols(full_col):
@@ -50,15 +50,16 @@ def check_max(current_max, id):
 @login_required
 def upload_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
-    clear_works()
-    # check whether it's valid:
-    max_id = 0
-    set_seq('works_work', 1)
+
     if form.is_valid():
         file = form.cleaned_data['file_name']
         csvf = StringIO(file.read().decode())
         reader = csv.reader(csvf, delimiter=',')
         cnt = 0
+        clear_works()
+        # check whether it's valid:
+        max_id = 0
+        set_seq('works_work', 1)
         for row in reader:
             cnt += 1
             if cnt == 1:
@@ -91,9 +92,10 @@ def upload_works(request) -> HttpResponse:
                         file5=row[22],
                         )
             work.save()
+        set_seq('works_work', max_id + 1)
+        return redirect('home_works')
 
     context = {'form': form, }
-    set_seq('works_work', max_id+1)
     return render(request, 'works/file_load.html', context)
 
 

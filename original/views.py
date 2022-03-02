@@ -117,7 +117,7 @@ def upload_old_works(request) -> HttpResponse:
                                    location=row[4],
                                    value=row[5] if row[5] else None,
                                    inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
-                                   #selected file placeholder
+                                   # selected file placeholder
                                    title=row[7],
                                    series=row[8],
                                    type=row[9],
@@ -143,6 +143,7 @@ def upload_old_works(request) -> HttpResponse:
                                    url5=row[24]
                                    )
                 old_work.save()
+        return redirect('home_original')
 
     context = {'form': form, }
     return render(request, 'original/file_load.html', context)
