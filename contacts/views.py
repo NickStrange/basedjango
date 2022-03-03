@@ -144,15 +144,6 @@ def check_max(current_max, id):
         return current_max
 
 
-# def set_seq(val):
-#     connection_db = sqlite3.connect('db.sqlite3')
-#     table_connection_db = connection_db.cursor()
-#     table_connection_db.execute(f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
-#     connection_db.commit()
-#     connection_db.close()
-#     print('set id', f"UPDATE sqlite_sequence set seq ={val} WHERE name ='contacts_contact'")
-
-
 def read_file(file_name):
     file = file_name.read().decode('utf-8')
     reader = csv.DictReader(io.StringIO(file))
@@ -179,8 +170,12 @@ def load_contacts(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            read_file(request.FILES['file'])
-            return redirect('home_contacts')
+            file_name = request.FILES['file'].name
+            if file_name.startswith("Contact"):
+                read_file(request.FILES['file'])
+                return redirect('home_contacts')
+            else:
+                messages.error(request, f"{file_name} should start with 'Contact'")
     else:
         form = UploadFileForm()
     return render(request, "contacts/load-contacts.html", {'form': form})

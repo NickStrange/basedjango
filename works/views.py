@@ -54,46 +54,51 @@ def upload_works(request) -> HttpResponse:
     if form.is_valid():
         file = form.cleaned_data['file_name']
         csvf = StringIO(file.read().decode())
-        reader = csv.reader(csvf, delimiter=',')
-        cnt = 0
-        clear_works()
-        # check whether it's valid:
-        max_id = 0
-        set_seq('works_work', 1)
-        for row in reader:
-            cnt += 1
-            if cnt == 1:
-                continue
 
-            max_id = check_max(max_id, row[1])
+        file_name = form.cleaned_data['file_name'].name
+        if file_name.startswith("Work"):
+            reader = csv.reader(csvf, delimiter=',')
+            cnt = 0
+            clear_works()
+            # check whether it's valid:
+            max_id = 0
+            set_seq('works_work', 1)
+            for row in reader:
+                cnt += 1
+                if cnt == 1:
+                    continue
 
-            work = Work(
-                        item_id=row[1],
-                        source=row[2],
-                        notes=row[3],
-                        location=row[4],
-                        value=row[5] if row[5] else None,
-                        inventory_date=datetime.strptime(row[6], '%Y-%m-%d') if row[6] else None,
-                        title=row[7],
-                        series=row[8],
-                        date_year=row[9],
-                        medium=' '.join(row[10].split()),
-                        signature_and_writing=row[11],
-                        condition=row[12],
-                        category=row[13],
-                        height=row[14] if row[14] else None,
-                        width=row[15] if row[15] else None,
-                        depth=row[16] if row[16] else None,
-                        size_note=row[17],
-                        file1=row[18],
-                        file2=row[19],
-                        file3=row[20],
-                        file4=row[21],
-                        file5=row[22],
-                        )
-            work.save()
-        set_seq('works_work', max_id + 1)
-        return redirect('home_works')
+                max_id = check_max(max_id, row[1])
+
+                work = Work(
+                            item_id=row[1],
+                            source=row[2],
+                            notes=row[3],
+                            location=row[4],
+                            value=row[5] if row[5] else None,
+                            inventory_date=datetime.strptime(row[6], '%Y-%m-%d') if row[6] else None,
+                            title=row[7],
+                            series=row[8],
+                            date_year=row[9],
+                            medium=' '.join(row[10].split()),
+                            signature_and_writing=row[11],
+                            condition=row[12],
+                            category=row[13],
+                            height=row[14] if row[14] else None,
+                            width=row[15] if row[15] else None,
+                            depth=row[16] if row[16] else None,
+                            size_note=row[17],
+                            file1=row[18],
+                            file2=row[19],
+                            file3=row[20],
+                            file4=row[21],
+                            file5=row[22],
+                            )
+                work.save()
+            set_seq('works_work', max_id + 1)
+            return redirect('home_works')
+        else:
+            messages.error(request, f"{file_name} should start with 'Work'")
 
     context = {'form': form, }
     return render(request, 'works/file_load.html', context)

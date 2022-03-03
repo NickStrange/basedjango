@@ -91,59 +91,63 @@ def upload_old_works(request) -> HttpResponse:
     form = WorkLoadForm(request.POST or None, request.FILES or None)
     # check whether it's valid:
     if form.is_valid():
-        file = form.cleaned_data['file_name']
-        csvf = StringIO(file.read().decode())
-        reader = csv.reader(csvf, delimiter=',')
-        cnt = 0
-        OldWork.objects.all().delete()
-        for row in reader:
-            cnt += 1
-            if cnt == 1:
-                continue
+        file_name = form.cleaned_data['file_name'].name
+        if file_name.startswith("Original"):
+            file = form.cleaned_data['file_name']
+            csvf = StringIO(file.read().decode())
+            reader = csv.reader(csvf, delimiter=',')
+            cnt = 0
+            OldWork.objects.all().delete()
+            for row in reader:
+                cnt += 1
+                if cnt == 1:
+                    continue
 
-            row[14] = check_null_category(row[14], row[1])
+                row[14] = check_null_category(row[14], row[1])
 
-            if row[1].strip() == 'AT.P 0774':
-                print('ignore', row[1])
-            else:
-                if row[1].strip() == 'AT.B.0001':
-                    print('was', row[14])
-                    row[14] = 'Container'
-                    print('modify', row[1], 'Container')
-                old_work = OldWork(index=cnt-1,
-                                   item_id=row[1],
-                                   source=row[2],
-                                   notes=row[3],
-                                   location=row[4],
-                                   value=row[5] if row[5] else None,
-                                   inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
-                                   # selected file placeholder
-                                   title=row[7],
-                                   series=row[8],
-                                   type=row[9],
-                                   date_year=row[10],
-                                   medium=' '.join(row[11].split()),
-                                   signature_and_writing=row[12],
-                                   condition=row[13],
-                                   category=row[14],
-                                   height=row[15] if row[15] and row[15] != '?' else None,
-                                   width=row[16] if row[16] and row[16] != '?' else None,
-                                   depth=row[17] if row[17] else None,
-                                   size_note=row[18],
-                                   dimensions=row[19],
-                                   file1=decode_image(row[20], 0, row[1]),
-                                   file2=decode_image(row[21], 1, row[1]),
-                                   file3=decode_image(row[22], 2, row[1]),
-                                   file4=decode_image(row[23], 3, row[1]),
-                                   file5=decode_image(row[24], 4, row[1]),
-                                   url1=row[20],
-                                   url2=row[21],
-                                   url3=row[22],
-                                   url4=row[23],
-                                   url5=row[24]
-                                   )
-                old_work.save()
-        return redirect('home_original')
+                if row[1].strip() == 'AT.P 0774':
+                    print('ignore', row[1])
+                else:
+                    if row[1].strip() == 'AT.B.0001':
+                        print('was', row[14])
+                        row[14] = 'Container'
+                        print('modify', row[1], 'Container')
+                    old_work = OldWork(index=cnt-1,
+                                       item_id=row[1],
+                                       source=row[2],
+                                       notes=row[3],
+                                       location=row[4],
+                                       value=row[5] if row[5] else None,
+                                       inventory_date=datetime.strptime(row[6], '%m/%d/%Y') if row[6] else None,
+                                       # selected file placeholder
+                                       title=row[7],
+                                       series=row[8],
+                                       type=row[9],
+                                       date_year=row[10],
+                                       medium=' '.join(row[11].split()),
+                                       signature_and_writing=row[12],
+                                       condition=row[13],
+                                       category=row[14],
+                                       height=row[15] if row[15] and row[15] != '?' else None,
+                                       width=row[16] if row[16] and row[16] != '?' else None,
+                                       depth=row[17] if row[17] else None,
+                                       size_note=row[18],
+                                       dimensions=row[19],
+                                       file1=decode_image(row[20], 0, row[1]),
+                                       file2=decode_image(row[21], 1, row[1]),
+                                       file3=decode_image(row[22], 2, row[1]),
+                                       file4=decode_image(row[23], 3, row[1]),
+                                       file5=decode_image(row[24], 4, row[1]),
+                                       url1=row[20],
+                                       url2=row[21],
+                                       url3=row[22],
+                                       url4=row[23],
+                                       url5=row[24]
+                                       )
+                    old_work.save()
+            return redirect('home_original')
+        else:
+            messages.error(request, f"{file_name} should start with 'Original'")
 
     context = {'form': form, }
     return render(request, 'original/file_load.html', context)
